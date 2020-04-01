@@ -8,10 +8,7 @@ import RegisterPage from './pages/RegisterPage';
 function App() {
 	return (
 		<>
-			<Route
-				path={`${process.env.PUBLIC_URL}/dashboard`}
-				component={MainPage}
-			/>
+			<Route path={`/dashboard`} component={MainPage} />
 			<Route path={'/auth/login'} component={LoginPage} />
 			<Route path={'/auth/register'} component={RegisterPage} />
 		</>
