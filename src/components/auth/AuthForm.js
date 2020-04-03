@@ -1,28 +1,53 @@
 import React from 'react';
-import { Paper } from '@material-ui/core';
+import {
+	Paper,
+	AppBar,
+	Toolbar,
+	Typography,
+	Container,
+	useMediaQuery,
+} from '@material-ui/core';
+import clsx from 'clsx';
 
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
 	root: {
-		minHeight: '100vh',
-		background: '#eee',
+		display: 'flex',
+	},
+	container: {
+		height: '90vh',
 		display: 'flex',
 		justifyContent: 'center',
-		alignItems: 'center',
-		'& > *': {
-			width: '437px',
-		},
+		flexDirection: 'column',
+	},
+	mobile: {
+		justifyContent: 'flex-end',
 	},
 });
 
 const AuthForm = ({ children }) => {
 	const classes = useStyles();
 
+	const theme = useTheme();
+	const matches = useMediaQuery(theme.breakpoints.down('xs'));
+
 	return (
 		<>
 			<div className={classes.root}>
-				<Paper>{children}</Paper>
+				<AppBar>
+					<Toolbar>
+						<Typography variant="h5">Weasy</Typography>
+					</Toolbar>
+				</AppBar>
+				<Container
+					maxWidth={matches ? 'xs' : 'sm'}
+					className={clsx(classes.container, matches && classes.mobile)}
+				>
+					<Paper variant={matches ? 'elevation' : 'outlined'} elevation={0}>
+						{children}
+					</Paper>
+				</Container>
 			</div>
 		</>
 	);

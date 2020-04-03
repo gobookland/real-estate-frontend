@@ -4,11 +4,6 @@ import { Grid, TextField, Typography, Button, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
-	header: {
-		background: '#3f51b5',
-		color: '#fff',
-		padding: '.8rem 0',
-	},
 	body: {
 		padding: '1rem',
 	},
@@ -26,9 +21,6 @@ const LoginForm = ({ onChangeField, onChangeForm, onSubmit, error }) => {
 
 	return (
 		<>
-			<Typography variant="h4" align="center" className={classes.header}>
-				로그인
-			</Typography>
 			<Box component="form" onSubmit={onSubmit}>
 				<Grid container className={classes.body} spacing={3}>
 					<Grid item xs={12}>
@@ -72,6 +64,7 @@ const LoginForm = ({ onChangeField, onChangeForm, onSubmit, error }) => {
 							variant="contained"
 							className={classes.login}
 							type="submit"
+							fullWidth
 						>
 							로그인
 						</Button>
