@@ -5,10 +5,18 @@ import App from './App';
 import { HashRouter } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 import ApolloClient from 'apollo-boost';
+import { createHttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';
 
-const client = new ApolloClient({
+const link = createHttpLink({
 	uri: 'https://blueberry-pudding-72910.herokuapp.com/graphql',
+	credentials: 'include',
+});
+
+const client = new ApolloClient({
+	link,
+	cache: new InMemoryCache(),
 });
 
 ReactDOM.render(
