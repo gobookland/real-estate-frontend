@@ -1,13 +1,13 @@
 import React from 'react';
-import AppBarWithNavi from '../components/layout/AppBarWithNavi';
+import AppBarWithNaviContainer from '../containers/layout/AppBarWithNaviContainer';
 import { Route, withRouter } from 'react-router-dom';
 import BuildingTableContainer from '../containers/buildings/BuildingTableContainer';
 import BuildingControlFormContainer from '../containers/buildings/BuildingControlFormContainers';
 
 const MainPage = ({ match }) => {
 	return (
-		<AppBarWithNavi>
-			<Route path={`${match.path}/buildings`} exact>
+		<AppBarWithNaviContainer>
+			<Route path={[`${match.path}/buildings`, `${match.path}`]} exact>
 				<BuildingTableContainer />
 			</Route>
 			<Route path={`${match.path}/buildings/add`}>
@@ -16,7 +16,7 @@ const MainPage = ({ match }) => {
 			<Route path={`${match.path}/customers`}>
 				<h1>good</h1>
 			</Route>
-		</AppBarWithNavi>
+		</AppBarWithNaviContainer>
 	);
 };
 

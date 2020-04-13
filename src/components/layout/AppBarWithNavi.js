@@ -1,199 +1,178 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import {
+	Button,
 	AppBar,
-	Link,
-	Tooltip,
-	CssBaseline,
-	Divider,
-	Drawer,
-	Hidden,
-	IconButton,
-	List,
-	ListItem,
-	ListItemIcon,
-	ListItemText,
-	Toolbar,
 	Typography,
-	Collapse,
+	Toolbar,
+	Box,
+	Hidden,
+	BottomNavigation,
+	BottomNavigationAction,
+	useMediaQuery,
 } from '@material-ui/core';
-import { Apartment, Person, AddBox } from '@material-ui/icons';
-import MenuIcon from '@material-ui/icons/Menu';
-import { withRouter } from 'react-router-dom';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { LocationCity, PersonPin, Traffic } from '@material-ui/icons';
+import { NavLink, withRouter } from 'react-router-dom';
+import clsx from 'clsx';
 
-const drawerWidth = 240;
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
 	root: {
 		display: 'flex',
-	},
-	drawer: {
-		[theme.breakpoints.up('sm')]: {
-			width: drawerWidth,
-			flexShrink: 0,
-		},
+		flexDirection: 'column',
 	},
 	appBar: {
-		[theme.breakpoints.up('sm')]: {
-			width: `calc(100% - ${drawerWidth}px)`,
-			marginLeft: drawerWidth,
+		height: '120px',
+	},
+	appBarMobile: {
+		height: '60px',
+	},
+	toolBar: {
+		height: '64px',
+	},
+	navi: {
+		display: 'flex',
+		padding: '0 24px',
+	},
+	navLink: {
+		textDecoration: 'none',
+		position: 'relative',
+	},
+	naviItem: {
+		fontSize: '1.2rem',
+		color: '#cccccc',
+		padding: '0 1.7rem',
+		lineHeight: '56px',
+	},
+	naviItemActive: {
+		'& button': {
+			color: '#fff',
+		},
+		'&::after': {
+			position: 'absolute',
+			content: "''",
+			bottom: 0,
+			left: '2rem',
+			borderTop: '0px solid transparent',
+			borderLeft: '7px solid transparent',
+			borderRight: '7px solid transparent',
+			borderBottom: '7px solid #fff',
 		},
 	},
-	menuButton: {
-		marginRight: theme.spacing(2),
-		[theme.breakpoints.up('sm')]: {
-			display: 'none',
+	childRoot: {
+		display: 'flex',
+		flexDirection: 'column',
+		width: '100%',
+		marginTop: '120px',
+		minHeight: 'calc(100vh - 120px)',
+		background: '#eee',
+	},
+	childRootMobile: {
+		marginTop: '60px',
+		minHeight: 'calc(100vh - 60px - 56px - 48px)',
+	},
+	bottomNavi: {
+		position: 'fixed',
+		bottom: 0,
+		width: '100%',
+		background: '#3f51b5',
+	},
+	bottomNaviAction: {
+		'&.selected': {
+			color: '#fff',
 		},
-	},
-	// necessary for content to be below app bar
-	toolbar: theme.mixins.toolbar,
-	drawerPaper: {
-		width: drawerWidth,
-	},
-	content: {
-		flexGrow: 1,
-		padding: theme.spacing(3),
-	},
-	normalText: {
-		'&:hover': {
-			textDecoration: 'none',
-		},
-		color: '#3e3e3e',
-	},
-	nested: {
-		paddingLeft: theme.spacing(4),
 	},
 }));
 
-const ResponsiveDrawer = ({ children, container, match }) => {
+const AppBarWithNavi = ({ match, children, history, location }) => {
 	const classes = useStyles();
 	const theme = useTheme();
-	const [mobileOpen, setMobileOpen] = useState(false);
+	const breakPoint = useMediaQuery(theme.breakpoints.down('xs'));
 
-	const [buildingOpen, setBuildingOpen] = useState(false);
-
-	const handleDrawerToggle = () => {
-		setMobileOpen(!mobileOpen);
+	const handleBottomNavi = (e, value) => {
+		history.push(value);
 	};
-
-	const handleBuildingOpen = () => {
-		setBuildingOpen(!buildingOpen);
-	};
-
-	const drawer = (
-		<div>
-			<div className={classes.toolbar} />
-			<Divider />
-			<List>
-				<Tooltip
-					title="건물"
-					placement="right"
-					arrow
-					onClick={handleBuildingOpen}
-				>
-					<ListItem button>
-						<ListItemIcon>
-							<Apartment />
-						</ListItemIcon>
-						<ListItemText primary="건물 관리" />
-					</ListItem>
-				</Tooltip>
-				<Collapse in={buildingOpen} unmountOnExit timeout="auto">
-					<List>
-						<Link
-							to={`${match.url}/buildings/add`}
-							className={classes.normalText}
-						>
-							<Tooltip title="건물 추가" arrow placement="right">
-								<ListItem button className={classes.nested}>
-									<ListItemIcon>
-										<AddBox />
-									</ListItemIcon>
-									<ListItemText primary="건물 추가" />
-								</ListItem>
-							</Tooltip>
-						</Link>
-					</List>
-				</Collapse>
-				<Link to="/dashboard/customers" className={classes.normalText}>
-					<Tooltip title="고객" placement="right" arrow>
-						<ListItem button>
-							<ListItemIcon>
-								<Person />
-							</ListItemIcon>
-							<ListItemText primary="고객 관리" />
-						</ListItem>
-					</Tooltip>
-				</Link>
-			</List>
-		</div>
-	);
 
 	return (
 		<div className={classes.root}>
-			<CssBaseline />
-			<AppBar position="fixed" className={classes.appBar}>
-				<Toolbar>
-					<IconButton
-						color="inherit"
-						aria-label="open drawer"
-						edge="start"
-						onClick={handleDrawerToggle}
-						className={classes.menuButton}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Typography variant="h6" noWrap>
-						Real Estate
-					</Typography>
+			<AppBar
+				className={clsx(classes.appBar, breakPoint && classes.appBarMobile)}
+				elevation={0}
+			>
+				<Toolbar className={classes.toolBar}>
+					<Typography variant="h5">Real Estate</Typography>
 				</Toolbar>
+				<Hidden xsDown>
+					<Box className={classes.navi}>
+						<NavLink
+							className={clsx(
+								classes.navLink,
+								match.isExact && classes.naviItemActive,
+							)}
+							activeClassName={classes.naviItemActive}
+							to={`${match.path}/buildings`}
+						>
+							<Button className={classes.naviItem} fullWidth>
+								건물
+							</Button>
+						</NavLink>
+						<NavLink
+							className={classes.navLink}
+							activeClassName={classes.naviItemActive}
+							to={`${match.path}/customers`}
+						>
+							<Button className={classes.naviItem} fullWidth>
+								고객
+							</Button>
+						</NavLink>
+						<NavLink
+							className={classes.navLink}
+							activeClassName={classes.naviItemActive}
+							to={`${match.path}/traffic`}
+						>
+							<Button className={classes.naviItem} fullWidth>
+								트래픽 지수
+							</Button>
+						</NavLink>
+					</Box>
+				</Hidden>
 			</AppBar>
-			<nav className={classes.drawer} aria-label="mailbox folders">
-				{/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-				<Hidden smUp implementation="css">
-					<Drawer
-						container={container}
-						variant="temporary"
-						anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-						open={mobileOpen}
-						onClose={handleDrawerToggle}
-						classes={{
-							paper: classes.drawerPaper,
-						}}
-						ModalProps={{
-							keepMounted: true, // Better open performance on mobile.
-						}}
-					>
-						{drawer}
-					</Drawer>
-				</Hidden>
-				<Hidden xsDown implementation="css">
-					<Drawer
-						classes={{
-							paper: classes.drawerPaper,
-						}}
-						variant="permanent"
-						open
-					>
-						{drawer}
-					</Drawer>
-				</Hidden>
-			</nav>
-			<main className={classes.content}>
-				<div className={classes.toolbar} />
+			<div
+				className={clsx(
+					classes.childRoot,
+					breakPoint && classes.childRootMobile,
+				)}
+			>
 				{children}
-			</main>
+			</div>
+			<Hidden smUp>
+				<BottomNavigation
+					className={classes.bottomNavi}
+					onChange={handleBottomNavi}
+					value={location.pathname}
+					// classes={{root:}}
+				>
+					<BottomNavigationAction
+						value={`${match.path}/buildings`}
+						className={classes.bottomNaviAction}
+						classes={{ selected: 'selected' }}
+						icon={<LocationCity />}
+					/>
+					<BottomNavigationAction
+						value={`${match.path}/customers`}
+						className={classes.bottomNaviAction}
+						classes={{ selected: 'selected' }}
+						icon={<PersonPin />}
+					/>
+					<BottomNavigationAction
+						value={`${match.path}/traffic`}
+						className={classes.bottomNaviAction}
+						classes={{ selected: 'selected' }}
+						icon={<Traffic />}
+					/>
+				</BottomNavigation>
+			</Hidden>
 		</div>
 	);
 };
 
-ResponsiveDrawer.propTypes = {
-	/**
-	 * Injected by the documentation to work in an iframe.
-	 * You won't need it on your project.
-	 */
-	container: PropTypes.any,
-};
-
-export default withRouter(ResponsiveDrawer);
+export default withRouter(AppBarWithNavi);

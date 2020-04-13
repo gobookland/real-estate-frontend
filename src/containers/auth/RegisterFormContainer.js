@@ -41,8 +41,8 @@ const RegisterFormContainer = ({ history }) => {
 				const exist = localStorage.getItem('user');
 				if (!exist) {
 					localStorage.setItem('user', JSON.stringify(register));
-					history.push('/');
 				}
+				history.push('/dashboard');
 			} catch (e) {
 				console.log(e);
 			}
@@ -56,7 +56,7 @@ const RegisterFormContainer = ({ history }) => {
 		try {
 			const exist = localStorage.getItem('user');
 			if (exist) {
-				history.push('/');
+				history.push('/dashboard');
 			}
 		} catch (e) {
 			console.log(e);

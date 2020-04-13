@@ -8,3 +8,12 @@ export const LOGIN = gql`
 		}
 	}
 `;
+
+export const CHECK = gql`
+	query {
+		check {
+			id
+			username
+		}
+	}
+`;
