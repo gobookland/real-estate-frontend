@@ -15,7 +15,10 @@ const MainPage = ({ match }) => {
 				<BuildingFormContainer />
 			</Route>
 			<Route path={`${match.path}/customers`}>
-				<h1>good</h1>
+				<h1>Building</h1>
+			</Route>
+			<Route path={`${match.path}/traffic`}>
+				<h1>Building</h1>
 			</Route>
 		</AppBarWithNaviContainer>
 	);
