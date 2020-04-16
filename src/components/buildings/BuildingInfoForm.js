@@ -342,7 +342,7 @@ const BuildingInfoForm = ({
 											)}
 										>
 											<img
-												src={`http://localhost:4000/uploads/${location.image}`}
+												src={`https://blueberry-pudding-72910.herokuapp.com/uploads/${location.image}`}
 												alt="nothing"
 												className="image"
 											/>
