@@ -1,11 +1,18 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 
 import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 
-function App() {
+function App({ history }) {
+	if (
+		history.location.pathname === '/' ||
+		history.location.pathname === '/dashboard'
+	) {
+		history.push('/dashboard/buildings');
+	}
+
 	return (
 		<>
 			<Switch>
@@ -17,4 +24,4 @@ function App() {
 	);
 }
 
-export default App;
+export default withRouter(App);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {} from '@material-ui/core';
 import {
 	makeStyles,
@@ -74,14 +74,12 @@ const columns = [
 		},
 	},
 ];
-
 const options = {
 	responsive: 'scrollMaxHeight',
 	filter: false,
 };
 
 const tab = ['매매', '임대'];
-
 const useStyles = makeStyles((theme) => ({
 	root: {
 		display: 'flex',
@@ -90,9 +88,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const BuildingDataTable = ({ tabIndex, data }) => {
+const BuildingDataTable = ({ tabIndex, data, handleRemove }) => {
 	const classes = useStyles();
-
 	const getMuiTheme = () =>
 		createMuiTheme({
 			overrides: {
@@ -104,6 +101,11 @@ const BuildingDataTable = ({ tabIndex, data }) => {
 				MuiTablePagination: {
 					root: {
 						padding: '0 !important',
+					},
+				},
+				MUIDataTableHeadCell: {
+					sortAction: {
+						alignItems: 'center',
 					},
 				},
 			},
@@ -160,7 +162,17 @@ const BuildingDataTable = ({ tabIndex, data }) => {
 					title={tabValue}
 					columns={columns}
 					data={tableData}
-					options={options}
+					options={{
+						...options,
+						onRowsDelete: (deleted) => {
+							let ids = [];
+							deleted.data.map((d) => {
+								const id = tableData[d.dataIndex].id;
+								ids.push(id);
+							});
+							handleRemove(ids);
+						},
+					}}
 				/>
 			</MuiThemeProvider>
 		</div>

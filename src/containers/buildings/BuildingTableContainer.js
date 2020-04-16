@@ -1,30 +1,44 @@
-import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
+import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { BUILDINGS } from '../../graphql/query/building';
 import BuildingTable from '../../components/buildings/BuildingTable';
+import { REMOVE_BUILDING } from '../../graphql/mutation/building';
 
 const BuildingTableContainer = () => {
-	const { data, loading, error } = useQuery(BUILDINGS);
-	// const [order, setOrder] = useState(-1);
-	// const [orderby, setOrderby] = useState('creationDate');
-	// const [orderType, setOrderType] = useState('all');
+	// * Querys and Mutation
+	const {
+		data: buildings,
+		loading: buildings_loading,
+		error: buildings_error,
+		refetch: buildings_refetch,
+	} = useQuery(BUILDINGS);
 
-	if (error) {
+	const [removeBuilding, { data: removedBuildings }] = useMutation(
+		REMOVE_BUILDING,
+	);
+	//
+
+	const handleRemove = async (ids) => {
+		await removeBuilding({
+			variables: {
+				ids,
+			},
+		});
+
+		buildings_refetch();
+	};
+
+	if (buildings_error) {
 		return <h1>Error</h1>;
 	}
 
-	if (loading) {
-		return <h1>Loading</h1>;
+	if (buildings_loading) {
+		return <BuildingTable loading />;
 	}
 
-	// const handleOrder = field => {
-	// 	if (field === 'creationDate') {
-	// 	}
-	// };
-
-	if (data) {
-		return <BuildingTable data={data.buildings} />;
-	}
+	return (
+		<BuildingTable data={buildings.buildings} handleRemove={handleRemove} />
+	);
 };
 
 export default BuildingTableContainer;

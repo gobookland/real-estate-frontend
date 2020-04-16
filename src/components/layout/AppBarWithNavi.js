@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 		padding: '0 24px',
 	},
+	noShow: {
+		display: 'none',
+	},
 	navLink: {
 		textDecoration: 'none',
 		position: 'relative',
@@ -68,7 +71,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 	childRootMobile: {
 		marginTop: '60px',
-		minHeight: 'calc(100vh - 60px - 56px - 48px)',
+		marginBottom: '60px',
+		minHeight: 'calc(100vh - 60px - 56px)',
 	},
 	bottomNavi: {
 		position: 'fixed',
@@ -102,7 +106,7 @@ const AppBarWithNavi = ({ match, children, history, location }) => {
 					<Typography variant="h5">Real Estate</Typography>
 				</Toolbar>
 				<Hidden xsDown>
-					<Box className={classes.navi}>
+					<Box className={clsx(classes.navi)}>
 						<NavLink
 							className={clsx(
 								classes.navLink,

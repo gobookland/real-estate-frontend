@@ -5,11 +5,11 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 import { ApolloClient } from 'apollo-client';
-import { createHttpLink } from 'apollo-link-http';
+import { createUploadLink } from 'apollo-upload-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';
 
-const link = createHttpLink({
+const link = createUploadLink({
 	// Todo: change url written below
 	uri: 'https://blueberry-pudding-72910.herokuapp.com/graphql',
 	// uri: 'http://localhost:4000/graphql',

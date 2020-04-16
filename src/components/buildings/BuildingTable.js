@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
-import { Tabs, Paper, Tab, Container, useMediaQuery } from '@material-ui/core';
+import {
+	Tabs,
+	Paper,
+	Tab,
+	Container,
+	useMediaQuery,
+	Fab,
+} from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Add } from '@material-ui/icons';
 import BuildingDataTable from './BuildingDataTable';
+import { withRouter } from 'react-router-dom';
 import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => ({
@@ -17,9 +26,13 @@ const useStyles = makeStyles((theme) => ({
 		bottom: '56px',
 		width: '100%',
 	},
+
+	fab: {
+		float: 'right',
+	},
 }));
 
-const BuildingTable = ({ data }) => {
+const BuildingTable = ({ data, history, match, handleRemove, loading }) => {
 	const classes = useStyles();
 	const theme = useTheme();
 	const breakPoint = useMediaQuery(theme.breakpoints.down('xs'));
@@ -28,6 +41,10 @@ const BuildingTable = ({ data }) => {
 
 	const handleChange = (e, newValue) => {
 		setTabValue(newValue);
+	};
+
+	const toAddPage = (e) => {
+		history.push(`${match.path}/add`);
 	};
 
 	return (
@@ -51,10 +68,28 @@ const BuildingTable = ({ data }) => {
 				</Tabs>
 			</Paper>
 			<Container maxWidth="md">
-				<BuildingDataTable tabIndex={tabValue} data={data} />
+				{loading ? (
+					'loading'
+				) : (
+					<>
+						<BuildingDataTable
+							tabIndex={tabValue}
+							data={data}
+							handleRemove={handleRemove}
+						/>
+						<Fab
+							color="primary"
+							aria-label="add"
+							className={classes.fab}
+							onClick={toAddPage}
+						>
+							<Add />
+						</Fab>
+					</>
+				)}
 			</Container>
 		</>
 	);
 };
 
-export default BuildingTable;
+export default withRouter(BuildingTable);

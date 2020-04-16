@@ -1,18 +1,8 @@
 import { gql } from 'apollo-boost';
 
 export const BUILDINGS = gql`
-	query(
-		$creationDate: Int
-		$dealType: String
-		$field: String
-		$fieldOrder: Int
-	) {
-		buildings(
-			creationDate: $creationDate
-			dealType: $dealType
-			field: $field
-			fieldOrder: $fieldOrder
-		) {
+	query {
+		buildings {
 			id
 			creationDate
 			buildingInfo {
@@ -37,7 +27,7 @@ export const BUILDINGS = gql`
 				}
 				rights
 			}
-			partyInfo {
+			officialsInfo {
 				owner
 				ownerPhone
 				lessee
