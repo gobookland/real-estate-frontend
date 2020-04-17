@@ -13,7 +13,7 @@ const BasicChart = ({ data, matchingName }) => {
 
 	return (
 		<Paper>
-			<Chart data={data}>
+			<Chart data={data} height={300}>
 				<ArgumentAxis />
 				<ValueAxis />
 				{keys.map((key) => (
