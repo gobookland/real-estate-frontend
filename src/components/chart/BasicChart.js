@@ -6,7 +6,6 @@ import {
 	LineSeries,
 	Chart,
 	Legend,
-	ZoomAndPan,
 } from '@devexpress/dx-react-chart-material-ui';
 
 const BasicChart = ({ data, matchingName }) => {

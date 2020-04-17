@@ -99,6 +99,10 @@ const options = {
 			return false;
 		return true;
 	},
+	fixedHeaderOptions: {
+		xAxis: false,
+		yAxis: false,
+	},
 	// onRowsExpand: (curExpanded, allExpanded) =>
 	// 	console.log(curExpanded, allExpanded),
 };
@@ -228,7 +232,7 @@ const BuildingDataTable = ({
 							const row = tableData[rowMeta.rowIndex].history;
 
 							if (tabValue === '매매') {
-								row.map((his, index) => {
+								row.map((his) => {
 									const date = new Date(parseInt(his.updateDate));
 									const argument = `${date.getFullYear()}-${
 										date.getMonth() + 1
@@ -241,11 +245,13 @@ const BuildingDataTable = ({
 										value1,
 										value2,
 									});
+
+									return his;
 								});
 							}
 
 							if (tabValue === '임대') {
-								row.map((his, index) => {
+								row.map((his) => {
 									const date = new Date(parseInt(his.updateDate));
 									const argument = `${date.getFullYear()}-${
 										date.getMonth() + 1
@@ -258,6 +264,8 @@ const BuildingDataTable = ({
 										value1,
 										value2,
 									});
+
+									return his;
 								});
 							}
 
