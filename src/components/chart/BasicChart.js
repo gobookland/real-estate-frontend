@@ -25,7 +25,6 @@ const BasicChart = ({ data, matchingName }) => {
 					/>
 				))}
 				<Legend />
-				<ZoomAndPan />
 			</Chart>
 		</Paper>
 	);

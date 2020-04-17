@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 		position: 'fixed',
 		bottom: '56px',
 		width: '100%',
+		zIndex: 999,
 	},
 
 	fab: {

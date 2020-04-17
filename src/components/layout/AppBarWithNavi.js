@@ -73,12 +73,14 @@ const useStyles = makeStyles((theme) => ({
 		marginTop: '60px',
 		marginBottom: '60px',
 		minHeight: 'calc(100vh - 60px - 56px)',
+		paddingBottom: '56px',
 	},
 	bottomNavi: {
 		position: 'fixed',
 		bottom: 0,
 		width: '100%',
 		background: '#3f51b5',
+		zIndex: 999,
 	},
 	bottomNaviAction: {
 		'&.selected': {
