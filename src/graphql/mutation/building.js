@@ -73,3 +73,40 @@ export const ADD_BUILDING = gql`
 		}
 	}
 `;
+
+export const MODIFY_BUILDING = gql`
+	mutation($id: ID!, $buildingInput: buildingInput) {
+		modifyBuilding(id: $id, buildingInput: $buildingInput) {
+			id
+			creationDate
+			buildingInfo {
+				name
+				image
+				saleArea
+				realArea
+				layer
+				number
+			}
+			dealInfo {
+				trade {
+					totalPrice
+					price
+					monthly
+					deposit
+				}
+				lease {
+					price
+					monthly
+					deposit
+				}
+				rights
+			}
+			officialsInfo {
+				owner
+				ownerPhone
+				lessee
+				lesseePhone
+			}
+		}
+	}
+`;

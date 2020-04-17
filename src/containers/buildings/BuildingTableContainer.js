@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { BUILDINGS } from '../../graphql/query/building';
 import BuildingTable from '../../components/buildings/BuildingTable';
@@ -13,9 +13,7 @@ const BuildingTableContainer = () => {
 		refetch: buildings_refetch,
 	} = useQuery(BUILDINGS);
 
-	const [removeBuilding, { data: removedBuildings }] = useMutation(
-		REMOVE_BUILDING,
-	);
+	const [removeBuilding] = useMutation(REMOVE_BUILDING);
 	//
 
 	const handleRemove = async (ids) => {

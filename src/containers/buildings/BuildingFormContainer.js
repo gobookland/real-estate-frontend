@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery, useLazyQuery } from '@apollo/react-hooks';
 import { withRouter } from 'react-router-dom';
 
-import { SINGLE_FILE_UPLOAD } from '../../graphql/mutation/file';
+// import { SINGLE_FILE_UPLOAD } from '../../graphql/mutation/file';
 import { SECTORS } from '../../graphql/query/sector';
 import { ADD_SECTOR } from '../../graphql/mutation/sector';
 import { ADD_LOCATION } from '../../graphql/mutation/location';
 import { LOCATIONS } from '../../graphql/query/location';
-import { ADD_BUILDING } from '../../graphql/mutation/building';
+import { ADD_BUILDING, MODIFY_BUILDING } from '../../graphql/mutation/building';
+import { BUILDING } from '../../graphql/query/building';
 
 import BuildingForm from '../../components/buildings/BuildingForm';
 
@@ -18,8 +19,8 @@ const initialState = {
 		number: 0,
 		saleArea: 0,
 		realArea: 0,
-		sector: 0,
-		sectorDetail: 0,
+		sector: '',
+		sectorDetail: '',
 		image: '',
 		location: '',
 		locationUrl: '',
@@ -46,6 +47,42 @@ const initialState = {
 };
 
 const BuildingFormContainer = ({ history, match }) => {
+	// * Graphql Mutation, Query manage
+	const [modifyBuilding] = useMutation(MODIFY_BUILDING);
+	const [addBuilding] = useMutation(ADD_BUILDING);
+
+	const {
+		data: locations,
+		error: locations_error,
+		loading: locations_loading,
+		refetch: locations_refetch,
+	} = useQuery(LOCATIONS);
+
+	const [addLocation] = useMutation(ADD_LOCATION);
+
+	// const [uploadSingleFile, { data: uploaded_file }] = useMutation(
+	// 	SINGLE_FILE_UPLOAD,
+	// );
+
+	const [addSector, { data: addedSector }] = useMutation(ADD_SECTOR);
+
+	const {
+		data: sectors,
+		error: sectors_error,
+		loading: sectors_loading,
+		refetch: sectors_refetch,
+	} = useQuery(SECTORS, { variables: { type: 'basic' } });
+
+	const [
+		getSectorDetail,
+		{
+			data: sectorDetail,
+			error: sectorDetail_error,
+			refetch: sectorDetail_refetch,
+		},
+	] = useLazyQuery(SECTORS);
+	//
+
 	// * State Manage
 	const [formState, setFormState] = useState(initialState);
 	const [checkState, setCheckState] = useState({
@@ -53,6 +90,66 @@ const BuildingFormContainer = ({ history, match }) => {
 		leaseCheck: false,
 		rightsCheck: false,
 	});
+
+	const [isModify, setIsModify] = useState(false);
+
+	const {
+		params: { buildingId },
+	} = match;
+	// * Initialize with selected building
+	const { data: building } = useQuery(BUILDING, {
+		variables: { id: buildingId },
+	});
+	useEffect(() => {
+		if (building) {
+			setIsModify(true);
+
+			const info = building.building;
+
+			const newInitialState = {
+				buildingInfo: {
+					...info.buildingInfo,
+					sector: info.buildingInfo.sectors.basic || 0,
+					sectorDetail: info.buildingInfo.sectors.detail || 0,
+					image: `http://localhost:4000/uploads/${info.buildingInfo.image}`,
+					location: info.buildingInfo.location.name,
+					locationUrl: `http://localhost:4000/uploads/${info.buildingInfo.location.image}`,
+				},
+				dealInfo: {
+					...info.dealInfo,
+				},
+				officialsInfo: {
+					...info.officialsInfo,
+				},
+			};
+
+			if (info.buildingInfo.sectors.basic) {
+				getSectorDetail({
+					variables: {
+						type: 'detail',
+						parent: info.buildingInfo.sectors.basic,
+					},
+				});
+			}
+			delete newInitialState.buildingInfo.sectors;
+			delete newInitialState.buildingInfo.__typename;
+			delete newInitialState.dealInfo.__typename;
+			delete newInitialState.dealInfo.trade.__typename;
+			delete newInitialState.dealInfo.lease.__typename;
+			delete newInitialState.officialsInfo.__typename;
+
+			setFormState(newInitialState);
+			if (info.dealInfo.trade.price) {
+				setCheckState((checkState) => ({ ...checkState, tradeCheck: true }));
+			}
+			if (info.dealInfo.lease.price) {
+				setCheckState((checkState) => ({ ...checkState, leaseCheck: true }));
+			}
+			if (info.dealInfo.rights) {
+				setCheckState((checkState) => ({ ...checkState, rightsCheck: true }));
+			}
+		}
+	}, [building, getSectorDetail]);
 
 	const [imageState, setImageState] = useState({
 		image: null,
@@ -70,36 +167,6 @@ const BuildingFormContainer = ({ history, match }) => {
 	const [sectorDialog, setSectorDialog] = useState(false);
 	const [locationDialog, setLocationDialog] = useState(false);
 
-	//
-	// * Graphql Mutation, Query manage
-	const [addBuilding] = useMutation(ADD_BUILDING);
-
-	const {
-		data: locations,
-		error: locations_error,
-		loading: locations_loading,
-		refetch: locations_refetch,
-	} = useQuery(LOCATIONS);
-
-	const [addLocation] = useMutation(ADD_LOCATION);
-
-	const [uploadSingleFile, { data: uploaded_file }] = useMutation(
-		SINGLE_FILE_UPLOAD,
-	);
-
-	const [addSector, { data: addedSector }] = useMutation(ADD_SECTOR);
-
-	const {
-		data: sectors,
-		error: sectors_error,
-		loading: sectors_loading,
-		refetch: sectors_refetch,
-	} = useQuery(SECTORS, { variables: { type: 'basic' } });
-
-	const [
-		getSectorDetail,
-		{ data: sectorDetail, error: sectorDetail_error },
-	] = useLazyQuery(SECTORS);
 	//
 
 	// change state with Form Element's onChange
@@ -144,22 +211,28 @@ const BuildingFormContainer = ({ history, match }) => {
 					name: addSectorState.basic,
 				},
 			});
+			sectors_refetch({
+				variables: {
+					type: 'basic',
+				},
+			});
 		} else {
 			// Adding detail sector
-			addSector({
+			await addSector({
 				variables: {
 					type: 'detail',
 					name: addSectorState.detail,
 					parent: addSectorState.parent,
 				},
 			});
+			sectorDetail_refetch({
+				variables: {
+					type: 'detail',
+					parent: formState.buildingInfo.sector,
+				},
+			});
 		}
 		setSectorDialog(false);
-		sectors_refetch({
-			variables: {
-				type: 'basic',
-			},
-		});
 	};
 
 	//
@@ -264,18 +337,26 @@ const BuildingFormContainer = ({ history, match }) => {
 		delete copiedFormState.buildingInfo.locationUrl;
 
 		copiedFormState.buildingInfo.image = 'No-Image.jpg';
+		console.log(copiedFormState.buildingInfo.location);
 		copiedFormState.buildingInfo.location = {
-			name: 'No',
+			name: copiedFormState.buildingInfo.location,
 			image: 'No-Image.jpg',
 		};
-
 		console.log(copiedFormState);
-
-		await addBuilding({
-			variables: {
-				buildingInput: copiedFormState,
-			},
-		});
+		if (isModify) {
+			await modifyBuilding({
+				variables: {
+					id: buildingId,
+					buildingInput: copiedFormState,
+				},
+			});
+		} else {
+			await addBuilding({
+				variables: {
+					buildingInput: copiedFormState,
+				},
+			});
+		}
 
 		setFormState(initialState);
 		history.push('/dashboard/buildings');

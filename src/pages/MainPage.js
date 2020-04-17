@@ -14,6 +14,9 @@ const MainPage = ({ match }) => {
 			<Route path={`${match.path}/buildings/add`}>
 				<BuildingFormContainer />
 			</Route>
+			<Route path={`${match.path}/buildings/building/:buildingId`}>
+				<BuildingFormContainer />
+			</Route>
 			<Route path={`${match.path}/customers`}>
 				<h1>Building</h1>
 			</Route>

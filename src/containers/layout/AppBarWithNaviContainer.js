@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import AppBarWithNavi from '../../components/layout/AppBarWithNavi';
-import { useQuery } from '@apollo/react-hooks';
-import { CHECK } from '../../graphql/query/user';
+// import { useQuery } from '@apollo/react-hooks';
+// import { CHECK } from '../../graphql/query/user';
 import { withRouter } from 'react-router-dom';
 
 const AppBarWithNaviContainer = ({ history, children }) => {
-	const { data, error } = useQuery(CHECK);
+	// const { data, error } = useQuery(CHECK);
 
 	// useEffect(() => {
 	// 	if (data) {

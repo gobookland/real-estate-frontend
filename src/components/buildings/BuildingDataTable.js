@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import {} from '@material-ui/core';
+import React from 'react';
+import { Button, TableRow, TableCell } from '@material-ui/core';
 import {
 	makeStyles,
 	createMuiTheme,
@@ -7,6 +7,9 @@ import {
 } from '@material-ui/core/styles';
 
 import MUIDataTable from 'mui-datatables';
+import { withRouter } from 'react-router-dom';
+
+import BasicChart from '../chart/BasicChart';
 
 const columns = [
 	{
@@ -73,10 +76,31 @@ const columns = [
 			sort: true,
 		},
 	},
+	{
+		label: ' ',
+		name: 'actions',
+		options: {
+			filter: false,
+			sort: false,
+		},
+	},
 ];
 const options = {
 	responsive: 'scrollMaxHeight',
 	filter: false,
+	expandableRows: true,
+	expandableRowsOnClick: true,
+	isRowExpandable: (dataIndex, expandedRows) => {
+		// Prevent expand/collapse of any row if there are 4 rows expanded already (but allow those already expanded to be collapsed)
+		if (
+			expandedRows.data.length > 4 &&
+			expandedRows.data.filter((d) => d.dataIndex === dataIndex).length === 0
+		)
+			return false;
+		return true;
+	},
+	// onRowsExpand: (curExpanded, allExpanded) =>
+	// 	console.log(curExpanded, allExpanded),
 };
 
 const tab = ['매매', '임대'];
@@ -88,7 +112,13 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const BuildingDataTable = ({ tabIndex, data, handleRemove }) => {
+const BuildingDataTable = ({
+	tabIndex,
+	data,
+	handleRemove,
+	history,
+	match,
+}) => {
 	const classes = useStyles();
 	const getMuiTheme = () =>
 		createMuiTheme({
@@ -106,6 +136,13 @@ const BuildingDataTable = ({ tabIndex, data, handleRemove }) => {
 				MUIDataTableHeadCell: {
 					sortAction: {
 						alignItems: 'center',
+					},
+				},
+				MUIDataTable: {
+					responsiveScrollMaxHeight: {
+						175: {
+							maxHeight: 'unset',
+						},
 					},
 				},
 			},
@@ -152,6 +189,18 @@ const BuildingDataTable = ({ tabIndex, data, handleRemove }) => {
 			date.getMonth() + 1
 		}-${date.getDate()}`;
 
+		newData.actions = (
+			<>
+				<Button
+					color="primary"
+					variant="outlined"
+					onClick={(e) => history.push(`${match.path}/building/${newData.id}`)}
+				>
+					수정
+				</Button>
+			</>
+		);
+
 		return newData;
 	});
 
@@ -169,8 +218,61 @@ const BuildingDataTable = ({ tabIndex, data, handleRemove }) => {
 							deleted.data.map((d) => {
 								const id = tableData[d.dataIndex].id;
 								ids.push(id);
+								return d;
 							});
 							handleRemove(ids);
+						},
+						renderExpandableRow: (rowData, rowMeta) => {
+							const colSpan = rowData.length + 1;
+							const chartData = [];
+							const row = tableData[rowMeta.rowIndex].history;
+
+							if (tabValue === '매매') {
+								row.map((his, index) => {
+									const date = new Date(parseInt(his.updateDate));
+									const argument = `${date.getFullYear()}-${
+										date.getMonth() + 1
+									}-${date.getDate()}`;
+									const value1 = his.dealInfo.trade.monthly;
+									const value2 = his.dealInfo.trade.price;
+
+									chartData.push({
+										argument,
+										value1,
+										value2,
+									});
+								});
+							}
+
+							if (tabValue === '임대') {
+								row.map((his, index) => {
+									const date = new Date(parseInt(his.updateDate));
+									const argument = `${date.getFullYear()}-${
+										date.getMonth() + 1
+									}-${date.getDate()}`;
+									const value1 = his.dealInfo.lease.monthly;
+									const value2 = his.dealInfo.lease.price;
+
+									chartData.push({
+										argument,
+										value1,
+										value2,
+									});
+								});
+							}
+
+							const matchingName = {
+								value1: '월세',
+								value2: '평당 가격',
+							};
+
+							return (
+								<TableRow>
+									<TableCell colSpan={colSpan}>
+										<BasicChart data={chartData} matchingName={matchingName} />
+									</TableCell>
+								</TableRow>
+							);
 						},
 					}}
 				/>
@@ -179,4 +281,4 @@ const BuildingDataTable = ({ tabIndex, data, handleRemove }) => {
 	);
 };
 
-export default BuildingDataTable;
+export default withRouter(BuildingDataTable);
