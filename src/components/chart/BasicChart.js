@@ -8,12 +8,22 @@ import {
 	Legend,
 } from '@devexpress/dx-react-chart-material-ui';
 
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+	paper: {
+		maxWidth: theme.breakpoints.width('sm'),
+	},
+}));
+
 const BasicChart = ({ data, matchingName, noLegend }) => {
+	const classes = useStyles();
+
 	const keys = Object.keys(data[0]).filter((key) => key !== 'argument');
 
 	return (
-		<Paper>
-			<Chart data={data} height={300}>
+		<Paper className={classes.paper}>
+			<Chart data={data} height={340}>
 				<ArgumentAxis />
 				<ValueAxis />
 				{keys.map((key) => (

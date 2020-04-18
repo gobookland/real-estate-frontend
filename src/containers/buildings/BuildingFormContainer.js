@@ -48,8 +48,14 @@ const initialState = {
 
 const BuildingFormContainer = ({ history, match }) => {
 	// * Graphql Mutation, Query manage
-	const [modifyBuilding] = useMutation(MODIFY_BUILDING);
-	const [addBuilding] = useMutation(ADD_BUILDING);
+	const [
+		modifyBuilding,
+		{ data: modifiedBuilding, error: modifiedBuilding_error },
+	] = useMutation(MODIFY_BUILDING);
+	const [
+		addBuilding,
+		{ data: addedBuilding, error: addedBuilding_error },
+	] = useMutation(ADD_BUILDING);
 
 	const {
 		data: locations,
@@ -357,9 +363,6 @@ const BuildingFormContainer = ({ history, match }) => {
 				},
 			});
 		}
-
-		setFormState(initialState);
-		history.push('/dashboard/buildings');
 	};
 
 	// * Manage Effects hook
@@ -368,6 +371,31 @@ const BuildingFormContainer = ({ history, match }) => {
 			console.log('good');
 		}
 	}, [addedSector]);
+
+	useEffect(() => {
+		if (modifiedBuilding) {
+			alert('수정이 완료됐습니다!');
+			setFormState(initialState);
+			history.push('/dashboard/buildings');
+		}
+		if (modifiedBuilding_error) {
+			console.log(modifiedBuilding_error);
+		}
+		if (addedBuilding) {
+			alert('등록이 완료됐습니다!');
+			setFormState(initialState);
+			history.push('/dashboard/buildings');
+		}
+		if (addedBuilding_error) {
+			console.log(addedBuilding_error);
+		}
+	}, [
+		addedBuilding,
+		addedBuilding_error,
+		modifiedBuilding,
+		modifiedBuilding_error,
+		history,
+	]);
 
 	if (sectors_error || sectorDetail_error || locations_error) {
 		return 'error';

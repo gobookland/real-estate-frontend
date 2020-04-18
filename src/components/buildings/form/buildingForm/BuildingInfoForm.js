@@ -19,7 +19,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { CameraAlt } from '@material-ui/icons';
-import clsx from 'clsx';
+// import clsx from 'clsx';
 
 const useBuildingFormStyle = makeStyles((theme) => ({
 	columnBox: {
