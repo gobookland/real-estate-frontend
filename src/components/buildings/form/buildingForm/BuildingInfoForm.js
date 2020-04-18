@@ -199,7 +199,7 @@ const BuildingInfoForm = ({
 						name="sector"
 						onChange={handleFormState('buildingInfo')}
 					>
-						<MenuItem value={0}>공실</MenuItem>
+						<MenuItem value={''}>공실</MenuItem>
 						{!sector_loading &&
 							sectors &&
 							sectors.sectors.map((sector) => (
@@ -222,7 +222,7 @@ const BuildingInfoForm = ({
 						}
 						onChange={handleFormState('buildingInfo')}
 					>
-						<MenuItem value={0}>공실</MenuItem>
+						<MenuItem value={''}>공실</MenuItem>
 						{sectorDetail &&
 							sectorDetail.map((sector) => (
 								<MenuItem key={sector.name} value={sector.name}>

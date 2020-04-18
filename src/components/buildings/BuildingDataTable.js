@@ -77,6 +77,14 @@ const columns = [
 		},
 	},
 	{
+		label: '트래픽 지수',
+		name: 'trafficData',
+		options: {
+			filter: false,
+			sort: true,
+		},
+	},
+	{
 		label: ' ',
 		name: 'actions',
 		options: {
@@ -113,6 +121,9 @@ const useStyles = makeStyles((theme) => ({
 		display: 'flex',
 		flexDirection: 'column',
 		padding: '24px 0',
+	},
+	actionButton: {
+		margin: '0 12px',
 	},
 }));
 
@@ -193,14 +204,30 @@ const BuildingDataTable = ({
 			date.getMonth() + 1
 		}-${date.getDate()}`;
 
+		newData.trafficData = '-';
+		const trafficLength = newData.traffic.length;
+		if (trafficLength !== 0) {
+			newData.trafficData = `${newData.traffic[trafficLength - 1].percentage}(${
+				newData.traffic[trafficLength - 1].updateDate
+			})`;
+		}
+
 		newData.actions = (
 			<>
 				<Button
 					color="primary"
 					variant="outlined"
+					className={classes.actionButton}
 					onClick={(e) => history.push(`${match.path}/building/${newData.id}`)}
 				>
 					수정
+				</Button>
+				<Button
+					color="primary"
+					className={classes.actionButton}
+					onClick={(e) => history.push(`/dashboard/traffic/${newData.id}`)}
+				>
+					트래픽 지수 보러가기
 				</Button>
 			</>
 		);

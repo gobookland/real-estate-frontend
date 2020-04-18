@@ -9,6 +9,7 @@ import {
 	Button,
 	Paper,
 	Typography,
+	CircularProgress,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
@@ -33,6 +34,12 @@ const useStyles = makeStyles((theme) => ({
 	resetContainer: {
 		padding: theme.spacing(3),
 	},
+	progressDiv: {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '60vh',
+	},
 }));
 
 const BuildingForm = ({
@@ -53,6 +60,7 @@ const BuildingForm = ({
 	handleAddLocation,
 	locationInfo,
 	handleSubmit,
+	buildingLoading,
 }) => {
 	const [activeStep, setActiveStep] = useState(0);
 	const classes = useStyles();
@@ -78,108 +86,116 @@ const BuildingForm = ({
 				maxWidth={breakPoint ? 'xs' : 'md'}
 				className={classes.container}
 			>
-				<Stepper activeStep={activeStep} orientation="vertical">
-					<Step>
-						<StepLabel>건물 정보</StepLabel>
-						<StepContent>
-							<BuildingInfoForm
-								handleImageState={handleImageState}
-								handleFormState={handleFormState}
-								handleAddSectorState={handleAddSectorState}
-								formState={formState}
-								sectorInfo={sectorInfo}
-								sectorDetail={sectorDetail}
-								addSectorState={addSectorState}
-								handleAddSectorSubmit={handleAddSectorSubmit}
-								sectorDialogHook={sectorDialogHook}
-								locationDialogHook={locationDialogHook}
-								setLocationName={setLocationName}
-								handleAddLocation={handleAddLocation}
-								locationInfo={locationInfo}
-							/>
-							<div className={classes.actionsContainer}>
-								<div>
-									<Button disabled className={classes.button}>
-										이전
-									</Button>
-									<Button
-										variant="contained"
-										color="primary"
-										onClick={handleNext}
-										className={classes.button}
-									>
-										다음
-									</Button>
-								</div>
-							</div>
-						</StepContent>
-					</Step>
-					<Step>
-						<StepLabel>거래 정보</StepLabel>
-						<StepContent>
-							<DealInfoForm
-								handleFormState={handleFormState}
-								formState={formState}
-								handleDealInfoFormState={handleDealInfoFormState}
-								checkState={checkState}
-								handleCheckState={handleCheckState}
-							/>
-							<div className={classes.actionsContainer}>
-								<div>
-									<Button onClick={handleBack} className={classes.button}>
-										이전
-									</Button>
-									<Button
-										variant="contained"
-										color="primary"
-										onClick={handleNext}
-										className={classes.button}
-									>
-										다음
-									</Button>
-								</div>
-							</div>
-						</StepContent>
-					</Step>
-					<Step>
-						<StepLabel>관계자 정보</StepLabel>
-						<StepContent>
-							<OfficialsInfoForm
-								handleFormState={handleFormState}
-								formState={formState}
-							/>
-							<div className={classes.actionsContainer}>
-								<div>
-									<Button onClick={handleBack} className={classes.button}>
-										이전
-									</Button>
-									<Button
-										variant="contained"
-										color="primary"
-										onClick={handleNext}
-										className={classes.button}
-									>
-										완료{' '}
-									</Button>
-								</div>
-							</div>
-						</StepContent>
-					</Step>
-				</Stepper>
-				{activeStep === 3 && (
-					<Paper square elevation={0} className={classes.resetContainer}>
-						<Typography>모든 입력을 마치셨습니다.</Typography>
-						<Button onClick={handleReset} className={classes.button}>
-							처음부터
-						</Button>
-						<Button
-							color="primary"
-							onClick={handleSubmit}
-							className={classes.button}
-						>
-							제출
-						</Button>
-					</Paper>
+				{buildingLoading || sectorInfo[1] || locationInfo[1] ? (
+					<div className={classes.progressDiv}>
+						<CircularProgress />
+					</div>
+				) : (
+					<>
+						<Stepper activeStep={activeStep} orientation="vertical">
+							<Step>
+								<StepLabel>건물 정보</StepLabel>
+								<StepContent>
+									<BuildingInfoForm
+										handleImageState={handleImageState}
+										handleFormState={handleFormState}
+										handleAddSectorState={handleAddSectorState}
+										formState={formState}
+										sectorInfo={sectorInfo}
+										sectorDetail={sectorDetail}
+										addSectorState={addSectorState}
+										handleAddSectorSubmit={handleAddSectorSubmit}
+										sectorDialogHook={sectorDialogHook}
+										locationDialogHook={locationDialogHook}
+										setLocationName={setLocationName}
+										handleAddLocation={handleAddLocation}
+										locationInfo={locationInfo}
+									/>
+									<div className={classes.actionsContainer}>
+										<div>
+											<Button disabled className={classes.button}>
+												이전
+											</Button>
+											<Button
+												variant="contained"
+												color="primary"
+												onClick={handleNext}
+												className={classes.button}
+											>
+												다음
+											</Button>
+										</div>
+									</div>
+								</StepContent>
+							</Step>
+							<Step>
+								<StepLabel>거래 정보</StepLabel>
+								<StepContent>
+									<DealInfoForm
+										handleFormState={handleFormState}
+										formState={formState}
+										handleDealInfoFormState={handleDealInfoFormState}
+										checkState={checkState}
+										handleCheckState={handleCheckState}
+									/>
+									<div className={classes.actionsContainer}>
+										<div>
+											<Button onClick={handleBack} className={classes.button}>
+												이전
+											</Button>
+											<Button
+												variant="contained"
+												color="primary"
+												onClick={handleNext}
+												className={classes.button}
+											>
+												다음
+											</Button>
+										</div>
+									</div>
+								</StepContent>
+							</Step>
+							<Step>
+								<StepLabel>관계자 정보</StepLabel>
+								<StepContent>
+									<OfficialsInfoForm
+										handleFormState={handleFormState}
+										formState={formState}
+									/>
+									<div className={classes.actionsContainer}>
+										<div>
+											<Button onClick={handleBack} className={classes.button}>
+												이전
+											</Button>
+											<Button
+												variant="contained"
+												color="primary"
+												onClick={handleNext}
+												className={classes.button}
+											>
+												완료{' '}
+											</Button>
+										</div>
+									</div>
+								</StepContent>
+							</Step>
+						</Stepper>
+						{activeStep === 3 && (
+							<Paper square elevation={0} className={classes.resetContainer}>
+								<Typography>모든 입력을 마치셨습니다.</Typography>
+								<Button onClick={handleReset} className={classes.button}>
+									처음부터
+								</Button>
+								<Button
+									color="primary"
+									onClick={handleSubmit}
+									className={classes.button}
+								>
+									제출
+								</Button>
+							</Paper>
+						)}
+					</>
 				)}
 			</Container>
 		</div>

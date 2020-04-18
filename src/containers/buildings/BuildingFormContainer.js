@@ -97,7 +97,7 @@ const BuildingFormContainer = ({ history, match }) => {
 		params: { buildingId },
 	} = match;
 	// * Initialize with selected building
-	const { data: building } = useQuery(BUILDING, {
+	const { data: building, loading: buildingLoading } = useQuery(BUILDING, {
 		variables: { id: buildingId },
 	});
 	useEffect(() => {
@@ -375,6 +375,7 @@ const BuildingFormContainer = ({ history, match }) => {
 
 	return (
 		<BuildingForm
+			buildingLoading={buildingLoading}
 			sectorInfo={[sectors, sectors_loading]}
 			locationInfo={[locations, locations_loading]}
 			handleFormState={handleFormState}

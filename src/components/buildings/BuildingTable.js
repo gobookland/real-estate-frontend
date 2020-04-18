@@ -6,6 +6,7 @@ import {
 	Container,
 	useMediaQuery,
 	Fab,
+	CircularProgress,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Add } from '@material-ui/icons';
@@ -30,6 +31,12 @@ const useStyles = makeStyles((theme) => ({
 
 	fab: {
 		float: 'right',
+	},
+	progressDiv: {
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		height: '60vh',
 	},
 }));
 
@@ -70,7 +77,9 @@ const BuildingTable = ({ data, history, match, handleRemove, loading }) => {
 			</Paper>
 			<Container maxWidth="md">
 				{loading ? (
-					'loading'
+					<div className={classes.progressDiv}>
+						<CircularProgress />
+					</div>
 				) : (
 					<>
 						<BuildingDataTable

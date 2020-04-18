@@ -50,6 +50,10 @@ export const BUILDINGS = gql`
 				}
 				updateDate
 			}
+			traffic {
+				updateDate
+				percentage
+			}
 		}
 	}
 `;

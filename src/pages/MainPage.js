@@ -2,7 +2,7 @@ import React from 'react';
 import AppBarWithNaviContainer from '../containers/layout/AppBarWithNaviContainer';
 import { Route, withRouter } from 'react-router-dom';
 import BuildingTableContainer from '../containers/buildings/BuildingTableContainer';
-// import BuildingControlFormContainer from '../containers/buildings/BuildingControlFormContainers';
+import TrafficContainer from '../containers/traffic/TrafficContainer';
 import BuildingFormContainer from '../containers/buildings/BuildingFormContainer';
 
 const MainPage = ({ match }) => {
@@ -20,8 +20,8 @@ const MainPage = ({ match }) => {
 			<Route path={`${match.path}/customers`}>
 				<h1>Building</h1>
 			</Route>
-			<Route path={`${match.path}/traffic`}>
-				<h1>Building</h1>
+			<Route path={`${match.path}/traffic/:buildingId`}>
+				<TrafficContainer />
 			</Route>
 		</AppBarWithNaviContainer>
 	);
