@@ -61,6 +61,7 @@ const BuildingForm = ({
 	locationInfo,
 	handleSubmit,
 	buildingLoading,
+	loadings,
 }) => {
 	const [activeStep, setActiveStep] = useState(0);
 	const classes = useStyles();
@@ -110,6 +111,7 @@ const BuildingForm = ({
 										setLocationName={setLocationName}
 										handleAddLocation={handleAddLocation}
 										locationInfo={locationInfo}
+										loadings={loadings}
 									/>
 									<div className={classes.actionsContainer}>
 										<div>

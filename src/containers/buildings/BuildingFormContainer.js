@@ -85,6 +85,7 @@ const BuildingFormContainer = ({ history, match }) => {
 			data: sectorDetail,
 			error: sectorDetail_error,
 			refetch: sectorDetail_refetch,
+			loading: sectorDetail_loading,
 		},
 	] = useLazyQuery(SECTORS);
 	//
@@ -343,12 +344,10 @@ const BuildingFormContainer = ({ history, match }) => {
 		delete copiedFormState.buildingInfo.locationUrl;
 
 		copiedFormState.buildingInfo.image = 'No-Image.jpg';
-		console.log(copiedFormState.buildingInfo.location);
 		copiedFormState.buildingInfo.location = {
 			name: copiedFormState.buildingInfo.location,
 			image: 'No-Image.jpg',
 		};
-		console.log(copiedFormState);
 		if (isModify) {
 			await modifyBuilding({
 				variables: {
@@ -368,7 +367,6 @@ const BuildingFormContainer = ({ history, match }) => {
 	// * Manage Effects hook
 	useEffect(() => {
 		if (addedSector) {
-			console.log('good');
 		}
 	}, [addedSector]);
 
@@ -403,6 +401,11 @@ const BuildingFormContainer = ({ history, match }) => {
 
 	return (
 		<BuildingForm
+			loadings={{
+				sectorDetail: sectorDetail_loading,
+				sectors: sectors_loading,
+				locations: locations_loading,
+			}}
 			buildingLoading={buildingLoading}
 			sectorInfo={[sectors, sectors_loading]}
 			locationInfo={[locations, locations_loading]}

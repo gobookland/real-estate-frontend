@@ -16,6 +16,7 @@ import {
 	Tabs,
 	Tab,
 	Typography,
+	CircularProgress,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { CameraAlt } from '@material-ui/icons';
@@ -76,6 +77,7 @@ const BuildingInfoForm = ({
 	setLocationName,
 	handleAddLocation,
 	locationInfo,
+	loadings,
 }) => {
 	const [sectorDialog, setSectorDialog] = sectorDialogHook;
 	const [locationDialog, setLocationDialog] = locationDialogHook;
@@ -192,7 +194,13 @@ const BuildingInfoForm = ({
 			{breakPoint && <Grid item xs={12} md={12}></Grid>}
 			<Grid item xs={12} md={4}>
 				<FormControl fullWidth>
-					<InputLabel htmlFor="sector">업종</InputLabel>
+					<InputLabel htmlFor="sector">
+						{loadings.sectors ? (
+							<CircularProgress style={{ width: '20px', height: '20px' }} />
+						) : (
+							'업종'
+						)}
+					</InputLabel>
 					<Select
 						id="sector"
 						value={buildingInfo.sector}
@@ -212,7 +220,13 @@ const BuildingInfoForm = ({
 			</Grid>
 			<Grid item xs={12} md={4}>
 				<FormControl fullWidth>
-					<InputLabel htmlFor="sectorDetail">상세 업종</InputLabel>
+					<InputLabel htmlFor="sectorDetail">
+						{loadings.sectorDetail ? (
+							<CircularProgress style={{ width: '20px', height: '20px' }} />
+						) : (
+							'상세 업종'
+						)}
+					</InputLabel>
 					<Select
 						id="sectorDetail"
 						value={buildingInfo.sectorDetail}
@@ -317,7 +331,13 @@ const BuildingInfoForm = ({
 			</Grid>
 			<Grid item xs={12} md={6}>
 				<FormControl fullWidth>
-					<InputLabel htmlFor="location">위치</InputLabel>
+					<InputLabel htmlFor="location">
+						{loadings.locations ? (
+							<CircularProgress style={{ width: '20px', height: '20px' }} />
+						) : (
+							'위치'
+						)}
+					</InputLabel>
 					<Select
 						id="location"
 						value={buildingInfo.location}
