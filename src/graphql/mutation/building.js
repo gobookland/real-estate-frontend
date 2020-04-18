@@ -12,6 +12,10 @@ export const REMOVE_BUILDING = gql`
 				realArea
 				layer
 				number
+				sectors {
+					basic
+					detail
+				}
 			}
 			dealInfo {
 				trade {
@@ -49,6 +53,10 @@ export const ADD_BUILDING = gql`
 				realArea
 				layer
 				number
+				sectors {
+					basic
+					detail
+				}
 			}
 			dealInfo {
 				trade {

@@ -12,6 +12,10 @@ export const BUILDINGS = gql`
 				realArea
 				layer
 				number
+				sectors {
+					detail
+					basic
+				}
 			}
 			dealInfo {
 				trade {

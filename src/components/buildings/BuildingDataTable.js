@@ -77,6 +77,22 @@ const columns = [
 		},
 	},
 	{
+		label: '업종',
+		name: 'buildingInfo.sectors.basic',
+		options: {
+			filter: true,
+			sort: false,
+		},
+	},
+	{
+		label: '상세 업종',
+		name: 'buildingInfo.sectors.detail',
+		options: {
+			filter: true,
+			sort: false,
+		},
+	},
+	{
 		label: '트래픽 지수',
 		name: 'trafficData',
 		options: {
@@ -95,7 +111,7 @@ const columns = [
 ];
 const options = {
 	responsive: 'scrollMaxHeight',
-	filter: false,
+	filter: true,
 	expandableRows: true,
 	expandableRowsOnClick: true,
 	isRowExpandable: (dataIndex, expandedRows) => {
