@@ -8,7 +8,7 @@ import {
 	Legend,
 } from '@devexpress/dx-react-chart-material-ui';
 
-const BasicChart = ({ data, matchingName }) => {
+const BasicChart = ({ data, matchingName, noLegend }) => {
 	const keys = Object.keys(data[0]).filter((key) => key !== 'argument');
 
 	return (
@@ -21,9 +21,10 @@ const BasicChart = ({ data, matchingName }) => {
 						argumentField="argument"
 						name={matchingName[key]}
 						valueField={key}
+						key={key}
 					/>
 				))}
-				<Legend />
+				{noLegend || <Legend />}
 			</Chart>
 		</Paper>
 	);

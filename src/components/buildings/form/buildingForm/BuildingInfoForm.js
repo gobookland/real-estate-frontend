@@ -326,14 +326,16 @@ const BuildingInfoForm = ({
 					>
 						{!locations_loading &&
 							locations &&
-							locations.locations.map((location) => (
-								<MenuItem
-									key={location.name}
-									value={location.name}
-									className={classes.locationMenuItem}
-								>
-									<div className={classes.columnBox}>
-										<div
+							locations.locations
+								.filter((location) => location.name.trim() !== '')
+								.map((location) => (
+									<MenuItem
+										key={location.name}
+										value={location.name}
+										className={classes.locationMenuItem}
+									>
+										<div className={classes.columnBox}>
+											{/* <div
 											className={clsx(
 												classes.imageBoxFixedWithWidth,
 												location.name === buildingInfo.location &&
@@ -346,11 +348,11 @@ const BuildingInfoForm = ({
 												alt="nothing"
 												className="image"
 											/>
+										</div> */}
+											<Typography>{location.name}</Typography>
 										</div>
-										<Typography>{location.name}</Typography>
-									</div>
-								</MenuItem>
-							))}
+									</MenuItem>
+								))}
 					</Select>
 				</FormControl>
 			</Grid>

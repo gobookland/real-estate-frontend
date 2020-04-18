@@ -207,9 +207,11 @@ const BuildingDataTable = ({
 		newData.trafficData = '-';
 		const trafficLength = newData.traffic.length;
 		if (trafficLength !== 0) {
-			newData.trafficData = `${newData.traffic[trafficLength - 1].percentage}(${
-				newData.traffic[trafficLength - 1].updateDate
-			})`;
+			const sum = newData.traffic.reduce(
+				(acc, value) => acc + value.percentage,
+				0,
+			);
+			newData.trafficData = `${sum / trafficLength}%`;
 		}
 
 		newData.actions = (

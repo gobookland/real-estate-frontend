@@ -98,6 +98,10 @@ export const BUILDING = gql`
 				lessee
 				lesseePhone
 			}
+			traffic {
+				updateDate
+				percentage
+			}
 		}
 	}
 `;
