@@ -32,7 +32,6 @@ const initialState = {
 			monthly: 0,
 		},
 		lease: {
-			price: 0,
 			deposit: 0,
 			monthly: 0,
 		},
@@ -146,10 +145,10 @@ const BuildingFormContainer = ({ history, match }) => {
 			delete newInitialState.officialsInfo.__typename;
 
 			setFormState(newInitialState);
-			if (info.dealInfo.trade.price) {
+			if (info.dealInfo.trade.monthly) {
 				setCheckState((checkState) => ({ ...checkState, tradeCheck: true }));
 			}
-			if (info.dealInfo.lease.price) {
+			if (info.dealInfo.lease.monthly) {
 				setCheckState((checkState) => ({ ...checkState, leaseCheck: true }));
 			}
 			if (info.dealInfo.rights) {

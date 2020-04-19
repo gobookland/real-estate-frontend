@@ -12,102 +12,226 @@ import { withRouter } from 'react-router-dom';
 import BasicChart from '../chart/BasicChart';
 
 const columns = [
-	{
-		label: '등록일',
-		name: 'creationDate',
-		options: {
-			filter: false,
-			sort: true,
+	[
+		{
+			label: '등록일',
+			name: 'creationDate',
+			options: {
+				filter: false,
+				sort: true,
+			},
 		},
-	},
-	{
-		label: '건물명',
-		name: 'buildingInfo.name',
-		options: {
-			filter: false,
-			sort: true,
+		{
+			label: '건물명',
+			name: 'buildingInfo.name',
+			options: {
+				filter: false,
+				sort: true,
+			},
 		},
-	},
-	{
-		label: '평당가격',
-		name: 'deal.price',
-		options: {
-			filter: false,
-			sort: true,
+		{
+			label: '매매가격',
+			name: 'deal.totalPrice',
+			options: {
+				filter: false,
+				sort: true,
+			},
 		},
-	},
-	{
-		label: '월세',
-		name: 'deal.monthly',
-		options: {
-			filter: false,
-			sort: true,
+		{
+			label: '실제 평수',
+			name: 'buildingInfo.realArea',
+			options: {
+				filter: false,
+				sort: true,
+			},
 		},
-	},
-	{
-		label: '보증금',
-		name: 'deal.deposit',
-		options: {
-			filter: false,
-			sort: true,
+		{
+			label: '평당가격',
+			name: 'deal.price',
+			options: {
+				filter: false,
+				sort: true,
+			},
 		},
-	},
-	{
-		label: '권리금',
-		name: 'dealInfo.rights',
-		options: {
-			filter: false,
-			sort: true,
+		{
+			label: '월세',
+			name: 'deal.monthly',
+			options: {
+				filter: false,
+				sort: true,
+			},
 		},
-	},
-	{
-		label: '층수',
-		name: 'buildingInfo.layer',
-		options: {
-			filter: false,
-			sort: true,
+		{
+			label: '보증금',
+			name: 'deal.deposit',
+			options: {
+				filter: false,
+				sort: true,
+			},
 		},
-	},
-	{
-		label: '호수',
-		name: 'buildingInfo.number',
-		options: {
-			filter: false,
-			sort: true,
+		{
+			label: '권리금',
+			name: 'dealInfo.rights',
+			options: {
+				filter: false,
+				sort: true,
+			},
 		},
-	},
-	{
-		label: '업종',
-		name: 'buildingInfo.sectors.basic',
-		options: {
-			filter: true,
-			sort: false,
+		{
+			label: '층수',
+			name: 'buildingInfo.layer',
+			options: {
+				filter: false,
+				sort: true,
+			},
 		},
-	},
-	{
-		label: '상세 업종',
-		name: 'buildingInfo.sectors.detail',
-		options: {
-			filter: true,
-			sort: false,
+		{
+			label: '호수',
+			name: 'buildingInfo.number',
+			options: {
+				filter: false,
+				sort: true,
+			},
 		},
-	},
-	{
-		label: '트래픽 지수',
-		name: 'trafficData',
-		options: {
-			filter: false,
-			sort: true,
+		{
+			label: '업종',
+			name: 'buildingInfo.sectors.basic',
+			options: {
+				filter: true,
+				sort: false,
+			},
 		},
-	},
-	{
-		label: ' ',
-		name: 'actions',
-		options: {
-			filter: false,
-			sort: false,
+		{
+			label: '상세 업종',
+			name: 'buildingInfo.sectors.detail',
+			options: {
+				filter: true,
+				sort: false,
+			},
 		},
-	},
+		{
+			label: '트래픽 지수',
+			name: 'trafficData',
+			options: {
+				filter: false,
+				sort: true,
+			},
+		},
+		{
+			label: ' ',
+			name: 'actions',
+			options: {
+				filter: false,
+				sort: false,
+			},
+		},
+	],
+	[
+		{
+			label: '등록일',
+			name: 'creationDate',
+			options: {
+				filter: false,
+				sort: true,
+			},
+		},
+		{
+			label: '건물명',
+			name: 'buildingInfo.name',
+			options: {
+				filter: false,
+				sort: true,
+			},
+		},
+		{
+			label: '실제 평수',
+			name: 'buildingInfo.realArea',
+			options: {
+				filter: false,
+				sort: true,
+			},
+		},
+		{
+			label: '평당가격',
+			name: 'deal.price',
+			options: {
+				filter: false,
+				sort: true,
+			},
+		},
+		{
+			label: '월세',
+			name: 'deal.monthly',
+			options: {
+				filter: false,
+				sort: true,
+			},
+		},
+		{
+			label: '보증금',
+			name: 'deal.deposit',
+			options: {
+				filter: false,
+				sort: true,
+			},
+		},
+		{
+			label: '권리금',
+			name: 'dealInfo.rights',
+			options: {
+				filter: false,
+				sort: true,
+			},
+		},
+		{
+			label: '층수',
+			name: 'buildingInfo.layer',
+			options: {
+				filter: false,
+				sort: true,
+			},
+		},
+		{
+			label: '호수',
+			name: 'buildingInfo.number',
+			options: {
+				filter: false,
+				sort: true,
+			},
+		},
+		{
+			label: '업종',
+			name: 'buildingInfo.sectors.basic',
+			options: {
+				filter: true,
+				sort: false,
+			},
+		},
+		{
+			label: '상세 업종',
+			name: 'buildingInfo.sectors.detail',
+			options: {
+				filter: true,
+				sort: false,
+			},
+		},
+		{
+			label: '트래픽 지수',
+			name: 'trafficData',
+			options: {
+				filter: false,
+				sort: true,
+			},
+		},
+		{
+			label: ' ',
+			name: 'actions',
+			options: {
+				filter: false,
+				sort: false,
+			},
+		},
+	],
 ];
 const options = {
 	responsive: 'scrollMaxHeight',
@@ -208,13 +332,6 @@ const BuildingDataTable = ({
 						whiteSpace: 'nowrap',
 					},
 				},
-				// MUIDataTable: {
-				// 	responsiveScrollMaxHeight: {
-				// 		175: {
-				// 			maxHeight: 'unset',
-				// 		},
-				// 	},
-				// },
 			},
 		});
 
@@ -228,7 +345,7 @@ const BuildingDataTable = ({
 						newData.deal = newData.dealInfo.trade;
 
 						let buildingName = newData.buildingInfo.name;
-						if (newData.dealInfo.lease.price) {
+						if (newData.dealInfo.lease.monthly) {
 							newData.buildingInfo.name =
 								buildingName[buildingName.length - 2] === '*'
 									? buildingName
@@ -241,9 +358,10 @@ const BuildingDataTable = ({
 					.map((d) => {
 						let newData = { ...d };
 						newData.deal = newData.dealInfo.lease;
+						newData.deal.totalPrice = 0;
 
 						let buildingName = newData.buildingInfo.name;
-						if (newData.dealInfo.trade.price) {
+						if (newData.dealInfo.trade.monthly) {
 							newData.buildingInfo.name =
 								buildingName[buildingName.length - 2] === '*'
 									? buildingName
@@ -259,6 +377,8 @@ const BuildingDataTable = ({
 		newData.creationDate = `${date.getFullYear()}-${
 			date.getMonth() + 1
 		}-${date.getDate()}`;
+
+		newData.deal.totalPrice = newData.deal.totalPrice.toLocaleString('ko-KR');
 
 		newData.deal.price = newData.deal.price.toLocaleString('ko-KR');
 
@@ -306,7 +426,7 @@ const BuildingDataTable = ({
 			<MuiThemeProvider theme={getMuiTheme()}>
 				<MUIDataTable
 					title={tabValue}
-					columns={columns}
+					columns={columns[tabIndex]}
 					data={tableData}
 					options={{
 						...options,

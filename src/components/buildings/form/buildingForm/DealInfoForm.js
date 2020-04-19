@@ -122,21 +122,6 @@ const DealInfoForm = ({
 					<Grid item xs={12} md={12}>
 						<Typography varaint="h5">임대</Typography>
 					</Grid>
-					<Grid item xs={12} md={12}>
-						<TextField
-							type="number"
-							label="평당 가격"
-							fullWidth
-							InputProps={{
-								endAdornment: (
-									<InputAdornment position="end">원</InputAdornment>
-								),
-							}}
-							onChange={handleDealInfoFormState('lease')}
-							name="price"
-							value={parseInt(dealInfo.lease.price)}
-						/>
-					</Grid>
 					<Grid item xs={12} md={6}>
 						<TextField
 							type="number"
@@ -167,6 +152,25 @@ const DealInfoForm = ({
 							value={parseInt(dealInfo.lease.deposit)}
 						/>
 					</Grid>
+					<Grid item xs={12} md={12}>
+						<TextField
+							type="number"
+							label="평당 가격"
+							fullWidth
+							disabled
+							InputProps={{
+								endAdornment: (
+									<InputAdornment position="end">원</InputAdornment>
+								),
+							}}
+							onChange={handleDealInfoFormState('lease')}
+							name="price"
+							value={Math.round(
+								parseInt(dealInfo.lease.monthly) / parseInt(saleArea),
+							)}
+						/>
+					</Grid>
+
 					<Grid item xs={12} md={12}></Grid>
 					<Grid item xs={12} md={12}></Grid>
 				</>
