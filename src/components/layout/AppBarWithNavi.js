@@ -11,7 +11,7 @@ import {
 	useMediaQuery,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { LocationCity, PersonPin, Traffic } from '@material-ui/icons';
+import { LocationCity, PersonPin, Traffic, Storage } from '@material-ui/icons';
 import { NavLink, withRouter } from 'react-router-dom';
 import clsx from 'clsx';
 
@@ -28,6 +28,10 @@ const useStyles = makeStyles((theme) => ({
 	},
 	toolBar: {
 		height: '64px',
+	},
+	header: {
+		width: '100%',
+		textAlign: 'center',
 	},
 	navi: {
 		display: 'flex',
@@ -49,16 +53,7 @@ const useStyles = makeStyles((theme) => ({
 	naviItemActive: {
 		'& button': {
 			color: '#fff',
-		},
-		'&::after': {
-			position: 'absolute',
-			content: "''",
-			bottom: 0,
-			left: '2rem',
-			borderTop: '0px solid transparent',
-			borderLeft: '7px solid transparent',
-			borderRight: '7px solid transparent',
-			borderBottom: '7px solid #fff',
+			fontWeight: 'bold',
 		},
 	},
 	childRoot: {
@@ -105,7 +100,12 @@ const AppBarWithNavi = ({ match, children, history, location }) => {
 				elevation={0}
 			>
 				<Toolbar className={classes.toolBar}>
-					<Typography variant="h5">Real Estate</Typography>
+					<Typography
+						variant="h5"
+						className={clsx(breakPoint && classes.header)}
+					>
+						Real Estate
+					</Typography>
 				</Toolbar>
 				<Hidden xsDown>
 					<Box className={clsx(classes.navi)}>
@@ -137,6 +137,15 @@ const AppBarWithNavi = ({ match, children, history, location }) => {
 						>
 							<Button className={classes.naviItem} fullWidth>
 								트래픽 지수
+							</Button>
+						</NavLink>
+						<NavLink
+							className={classes.navLink}
+							activeClassName={classes.naviItemActive}
+							to={`${match.path}/subData`}
+						>
+							<Button className={classes.naviItem} fullWidth>
+								서브 데이터
 							</Button>
 						</NavLink>
 					</Box>
@@ -174,6 +183,12 @@ const AppBarWithNavi = ({ match, children, history, location }) => {
 						className={classes.bottomNaviAction}
 						classes={{ selected: 'selected' }}
 						icon={<Traffic />}
+					/>
+					<BottomNavigationAction
+						value={`${match.path}/subData`}
+						className={classes.bottomNaviAction}
+						classes={{ selected: 'selected' }}
+						icon={<Storage />}
 					/>
 				</BottomNavigation>
 			</Hidden>

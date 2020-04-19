@@ -6,6 +6,7 @@ import {
 	LineSeries,
 	Chart,
 	Legend,
+	ZoomAndPan,
 } from '@devexpress/dx-react-chart-material-ui';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -35,6 +36,7 @@ const BasicChart = ({ data, matchingName, noLegend }) => {
 					/>
 				))}
 				{noLegend || <Legend />}
+				<ZoomAndPan />
 			</Chart>
 		</Paper>
 	);

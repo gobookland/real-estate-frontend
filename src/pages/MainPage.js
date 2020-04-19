@@ -4,6 +4,7 @@ import { Route, withRouter } from 'react-router-dom';
 import BuildingTableContainer from '../containers/buildings/BuildingTableContainer';
 import TrafficContainer from '../containers/traffic/TrafficContainer';
 import BuildingFormContainer from '../containers/buildings/BuildingFormContainer';
+import SubDataContainer from '../containers/subData/SubDataContainer';
 
 const MainPage = ({ match }) => {
 	return (
@@ -22,6 +23,9 @@ const MainPage = ({ match }) => {
 			</Route>
 			<Route path={`${match.path}/traffic/:buildingId`}>
 				<TrafficContainer />
+			</Route>
+			<Route path={`${match.path}/subData`}>
+				<SubDataContainer />
 			</Route>
 		</AppBarWithNaviContainer>
 	);

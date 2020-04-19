@@ -9,3 +9,13 @@ export const ADD_SECTOR = gql`
 		}
 	}
 `;
+
+export const DELETE_SECTOR = gql`
+	mutation($sectorInput: [sectorInput]) {
+		deleteSector(sectorInput: $sectorInput) {
+			type
+			name
+			parent
+		}
+	}
+`;

@@ -8,3 +8,12 @@ export const ADD_LOCATION = gql`
 		}
 	}
 `;
+
+export const DELETE_LOCATION = gql`
+	mutation($names: [String!]) {
+		deleteLocation(names: $names) {
+			image
+			name
+		}
+	}
+`;

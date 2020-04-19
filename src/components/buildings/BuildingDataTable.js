@@ -13,6 +13,14 @@ import BasicChart from '../chart/BasicChart';
 
 const columns = [
 	{
+		label: 'No.',
+		name: 'index',
+		options: {
+			filter: false,
+			sort: true,
+		},
+	},
+	{
 		label: '등록일',
 		name: 'creationDate',
 		options: {
@@ -111,6 +119,40 @@ const columns = [
 ];
 const options = {
 	responsive: 'scrollMaxHeight',
+	textLabels: {
+		body: {
+			noMatch: '검색 결과가 없습니다',
+			toolTip: '정렬',
+			columnHeaderTooltip: (column) => `Sort for ${column.label}`,
+		},
+		pagination: {
+			next: '다음 페이지',
+			previous: '이전 페이지',
+			rowsPerPage: '페이지당 건물 수',
+			displayRows: '전체',
+		},
+		toolbar: {
+			search: '검색',
+			downloadCsv: 'CSV 다운로드',
+			print: '프린트',
+			viewColumns: '컬럼 선택',
+			filterTable: '필터링',
+		},
+		filter: {
+			all: '전체',
+			title: '필터',
+			reset: '초기화',
+		},
+		viewColumns: {
+			title: '컬럼 선택',
+			titleAria: 'Show/Hide Table Columns',
+		},
+		selectedRows: {
+			text: '개 선택됨',
+			delete: '삭제',
+			deleteAria: 'Delete Selected Rows',
+		},
+	},
 	filter: true,
 	expandableRows: true,
 	expandableRowsOnClick: true,
@@ -169,13 +211,18 @@ const BuildingDataTable = ({
 						alignItems: 'center',
 					},
 				},
-				MUIDataTable: {
-					responsiveScrollMaxHeight: {
-						175: {
-							maxHeight: 'unset',
-						},
+				MuiFormLabel: {
+					root: {
+						whiteSpace: 'nowrap',
 					},
 				},
+				// MUIDataTable: {
+				// 	responsiveScrollMaxHeight: {
+				// 		175: {
+				// 			maxHeight: 'unset',
+				// 		},
+				// 	},
+				// },
 			},
 		});
 
@@ -213,12 +260,23 @@ const BuildingDataTable = ({
 						return newData;
 					});
 
-	tableData = tableData.map((d) => {
+	tableData = tableData.map((d, index) => {
 		let newData = { ...d };
 		const date = new Date(parseInt(newData.creationDate));
+
+		newData.index = index + 1;
+
 		newData.creationDate = `${date.getFullYear()}-${
 			date.getMonth() + 1
 		}-${date.getDate()}`;
+
+		newData.deal.price = newData.deal.price.toLocaleString('ko-KR');
+
+		newData.deal.monthly = newData.deal.monthly.toLocaleString('ko-KR');
+
+		newData.deal.deposit = newData.deal.deposit.toLocaleString('ko-KR');
+
+		newData.dealInfo.rights = newData.dealInfo.rights.toLocaleString('ko-KR');
 
 		newData.trafficData = '-';
 		const trafficLength = newData.traffic.length;
@@ -227,7 +285,7 @@ const BuildingDataTable = ({
 				(acc, value) => acc + value.percentage,
 				0,
 			);
-			newData.trafficData = `${sum / trafficLength}%`;
+			newData.trafficData = `${(sum / trafficLength).toFixed(2)}%`;
 		}
 
 		newData.actions = (

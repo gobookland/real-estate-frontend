@@ -2,7 +2,6 @@ import React from 'react';
 import {
 	Container,
 	Paper,
-	CircularProgress,
 	Grid,
 	Typography,
 	Slider,
@@ -10,7 +9,8 @@ import {
 	Divider,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import BasicChart from '../../components/chart/BasicChart';
+import ScreenLoading from '../loading/ScreenLoading';
+import BasicChart from '../chart/BasicChart';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -19,12 +19,6 @@ const useStyles = makeStyles((theme) => ({
 	container: {
 		paddingTop: '24px',
 		paddingBottom: '24px',
-	},
-	progressDiv: {
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
-		height: '60vh',
 	},
 	paper: {
 		padding: theme.spacing(3),
@@ -92,9 +86,7 @@ const Traffic = ({
 		<div className={classes.root}>
 			<Container maxWidth="md" className={classes.container}>
 				{isLoading ? (
-					<div className={classes.progressDiv}>
-						<CircularProgress />
-					</div>
+					<ScreenLoading />
 				) : (
 					<Paper className={classes.paper}>
 						<Grid container spacing={3}>

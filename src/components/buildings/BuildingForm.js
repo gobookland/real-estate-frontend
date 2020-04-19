@@ -9,13 +9,13 @@ import {
 	Button,
 	Paper,
 	Typography,
-	CircularProgress,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import BuildingInfoForm from './form/buildingForm/BuildingInfoForm';
 import DealInfoForm from './form/buildingForm/DealInfoForm';
 import OfficialsInfoForm from './form/buildingForm/OfficialsInfoForm';
+import ScreenLoading from '../loading/ScreenLoading';
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -33,12 +33,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 	resetContainer: {
 		padding: theme.spacing(3),
-	},
-	progressDiv: {
-		display: 'flex',
-		justifyContent: 'center',
-		alignItems: 'center',
-		height: '60vh',
 	},
 }));
 
@@ -88,9 +82,7 @@ const BuildingForm = ({
 				className={classes.container}
 			>
 				{buildingLoading || sectorInfo[1] || locationInfo[1] ? (
-					<div className={classes.progressDiv}>
-						<CircularProgress />
-					</div>
+					<ScreenLoading />
 				) : (
 					<>
 						<Stepper activeStep={activeStep} orientation="vertical">
