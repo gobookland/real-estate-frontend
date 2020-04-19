@@ -13,14 +13,6 @@ import BasicChart from '../chart/BasicChart';
 
 const columns = [
 	{
-		label: 'No.',
-		name: 'index',
-		options: {
-			filter: false,
-			sort: true,
-		},
-	},
-	{
 		label: '등록일',
 		name: 'creationDate',
 		options: {
@@ -264,8 +256,6 @@ const BuildingDataTable = ({
 		let newData = { ...d };
 		const date = new Date(parseInt(newData.creationDate));
 
-		newData.index = index + 1;
-
 		newData.creationDate = `${date.getFullYear()}-${
 			date.getMonth() + 1
 		}-${date.getDate()}`;
@@ -320,6 +310,7 @@ const BuildingDataTable = ({
 					data={tableData}
 					options={{
 						...options,
+						searchPlaceholder: '건물명',
 						onRowsDelete: (deleted) => {
 							let ids = [];
 							deleted.data.map((d) => {

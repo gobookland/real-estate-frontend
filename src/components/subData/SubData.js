@@ -250,7 +250,6 @@ const SubData = ({ loading, data, state, setState, handler }) => {
 						options={{
 							...options,
 							expandableRows: state.tabValue === 0,
-							// customSearchRender: () => {},
 							onRowsDelete: (deleted) => {
 								if (state.tabValue === 0) {
 									let sectors = [];
