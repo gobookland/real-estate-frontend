@@ -22,8 +22,10 @@ const initialState = {
 		sector: '',
 		sectorDetail: '',
 		image: '',
-		location: '',
-		locationUrl: '',
+		location: {
+			name: '',
+			image: '',
+		},
 	},
 	dealInfo: {
 		trade: {
@@ -81,7 +83,7 @@ const BuildingFormContainer = ({ history, match }) => {
 	const [
 		getSectorDetail,
 		{
-			data: sectorDetail,
+			data: sectorsDetail,
 			error: sectorDetail_error,
 			refetch: sectorDetail_refetch,
 			loading: sectorDetail_loading,
@@ -103,7 +105,7 @@ const BuildingFormContainer = ({ history, match }) => {
 		params: { buildingId },
 	} = match;
 	// * Initialize with selected building
-	const { data: building, loading: buildingLoading } = useQuery(BUILDING, {
+	const { data: building, loading: building_loading } = useQuery(BUILDING, {
 		variables: { id: buildingId },
 	});
 	useEffect(() => {
@@ -118,8 +120,10 @@ const BuildingFormContainer = ({ history, match }) => {
 					sector: info.buildingInfo.sectors.basic || 0,
 					sectorDetail: info.buildingInfo.sectors.detail || 0,
 					image: `http://localhost:4000/uploads/${info.buildingInfo.image}`,
-					location: info.buildingInfo.location.name,
-					locationUrl: `http://localhost:4000/uploads/${info.buildingInfo.location.image}`,
+					location: {
+						name: info.buildingInfo.location.name,
+						image: `http://localhost:4000/uploads/${info.buildingInfo.location.image}`,
+					},
 				},
 				dealInfo: {
 					...info.dealInfo,
@@ -178,13 +182,7 @@ const BuildingFormContainer = ({ history, match }) => {
 	// change state with Form Element's onChange
 	const handleFormState = (form) => (e) => {
 		const { name, value, type } = e.target;
-		setFormState({
-			...formState,
-			[form]: {
-				...formState[form],
-				[name]: type === 'number' ? parseInt(value) : value,
-			},
-		});
+
 		if (name === 'sector') {
 			if (value === 0) {
 				getSectorDetail({ variables: { type: 'nope' } });
@@ -197,8 +195,34 @@ const BuildingFormContainer = ({ history, match }) => {
 					},
 				});
 			} else {
+				setFormState({
+					...formState,
+					[form]: {
+						...formState[form],
+						[name]: value,
+					},
+				});
 				getSectorDetail({ variables: { type: 'detail', parent: value } });
 			}
+		} else if (name === 'location') {
+			setFormState({
+				...formState,
+				[form]: {
+					...formState[form],
+					location: {
+						...formState[form].location,
+						name: value,
+					},
+				},
+			});
+		} else {
+			setFormState({
+				...formState,
+				[form]: {
+					...formState[form],
+					[name]: type === 'number' ? parseInt(value) : value,
+				},
+			});
 		}
 	};
 
@@ -299,13 +323,27 @@ const BuildingFormContainer = ({ history, match }) => {
 	const handleImageState = (form) => (e) => {
 		const { files, name } = e.target;
 		setImageState({ ...imageState, [name]: files[0] });
-		setFormState({
-			...formState,
-			[form]: {
-				...formState[form],
-				[name]: URL.createObjectURL(files[0]),
-			},
-		});
+
+		if (name === 'locationUrl') {
+			setFormState({
+				...formState,
+				[form]: {
+					...formState[form],
+					location: {
+						...formState[form].location,
+						image: URL.createObjectURL(files[0]),
+					},
+				},
+			});
+		} else {
+			setFormState({
+				...formState,
+				[form]: {
+					...formState[form],
+					[name]: URL.createObjectURL(files[0]),
+				},
+			});
+		}
 	};
 
 	const handleAddLocation = async (e) => {
@@ -340,13 +378,10 @@ const BuildingFormContainer = ({ history, match }) => {
 		// 	buildingInfo: { ...formState.buildingInfo, image: imageName },
 		// });
 		const copiedFormState = { ...formState };
-		delete copiedFormState.buildingInfo.locationUrl;
 
 		copiedFormState.buildingInfo.image = 'No-Image.jpg';
-		copiedFormState.buildingInfo.location = {
-			name: copiedFormState.buildingInfo.location,
-			image: 'No-Image.jpg',
-		};
+		copiedFormState.buildingInfo.location.image = 'No-Image.jpg';
+
 		if (isModify) {
 			await modifyBuilding({
 				variables: {
@@ -398,31 +433,50 @@ const BuildingFormContainer = ({ history, match }) => {
 		return 'error';
 	}
 
+	const data = {
+		sectors,
+		sectorsDetail,
+		locations,
+	};
+
+	const loading = {
+		sectorsDetail: sectorDetail_loading,
+		sectors: sectors_loading,
+		locations: locations_loading,
+		building: building_loading,
+	};
+
+	const state = {
+		checkState,
+		formState,
+		addSectorState,
+		sectorDialog,
+		locationDialog,
+	};
+	const setState = {
+		setSectorDialog,
+		setLocationDialog,
+		setLocationName,
+	};
+
+	const handler = {
+		handleFormState,
+		handleDealInfoFormState,
+		handleCheckState,
+		handleAddSectorState,
+		handleImageState,
+		handleAddLocation,
+		handleAddSectorSubmit,
+		handleSubmit,
+	};
+
 	return (
 		<BuildingForm
-			loadings={{
-				sectorDetail: sectorDetail_loading,
-				sectors: sectors_loading,
-				locations: locations_loading,
-			}}
-			buildingLoading={buildingLoading}
-			sectorInfo={[sectors, sectors_loading]}
-			locationInfo={[locations, locations_loading]}
-			handleFormState={handleFormState}
-			handleDealInfoFormState={handleDealInfoFormState}
-			handleCheckState={handleCheckState}
-			handleAddSectorState={handleAddSectorState}
-			checkState={checkState}
-			formState={formState}
-			handleImageState={handleImageState}
-			sectorDetail={sectorDetail && sectorDetail.sectors}
-			addSectorState={addSectorState}
-			handleAddSectorSubmit={handleAddSectorSubmit}
-			sectorDialogHook={[sectorDialog, setSectorDialog]}
-			locationDialogHook={[locationDialog, setLocationDialog]}
-			setLocationName={setLocationName}
-			handleAddLocation={handleAddLocation}
-			handleSubmit={handleSubmit}
+			data={data}
+			loading={loading}
+			state={state}
+			setState={setState}
+			handler={handler}
 		/>
 	);
 };

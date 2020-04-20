@@ -42,9 +42,11 @@ const TrafficContainer = ({ history, match }) => {
 		return 'error';
 	}
 
+	const loadings = [buildingLoading];
+
 	return (
 		<Traffic
-			loadings={[buildingLoading]}
+			loadings={loadings}
 			buildingData={buildingData}
 			handleTrafficData={handleTrafficData}
 			handleTrafficSubmit={handleTrafficSubmit}

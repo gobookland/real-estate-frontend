@@ -181,46 +181,42 @@ const SubData = ({ loading, data, state, setState, handler }) => {
 
 	const sectorsDetail = {};
 
-	const tableData = useMemo(
-		() =>
-			state.tabValue === 0
-				? data.sectors &&
-				  data.sectors.sectors
-						.map((sector) => {
-							let copiedSector = { ...sector };
-							if (copiedSector.type === 'detail') {
-								sectorsDetail[copiedSector.parent] = sectorsDetail[
-									copiedSector.parent
-								]
-									? [
-											...sectorsDetail[copiedSector.parent],
-											{
-												type: '상세',
-												name: copiedSector.name,
-											},
-									  ]
-									: [
-											{
-												type: '상세',
-												name: copiedSector.name,
-											},
-									  ];
-
-								return false;
-							}
-
-							copiedSector.type = '기본';
-
-							return copiedSector;
-						})
-						.filter((item) => item !== false)
-				: data.locations.locations,
-		[data, sectorsDetail, state.tabValue],
-	);
-
 	if (loading.sectors && loading.locations) {
 		return <ScreenLoading />;
 	}
+	const tableData =
+		state.tabValue === 0
+			? data.sectors &&
+			  data.sectors.sectors
+					.map((sector) => {
+						let copiedSector = { ...sector };
+						if (copiedSector.type === 'detail') {
+							sectorsDetail[copiedSector.parent] = sectorsDetail[
+								copiedSector.parent
+							]
+								? [
+										...sectorsDetail[copiedSector.parent],
+										{
+											type: '상세',
+											name: copiedSector.name,
+										},
+								  ]
+								: [
+										{
+											type: '상세',
+											name: copiedSector.name,
+										},
+								  ];
+
+							return false;
+						}
+
+						copiedSector.type = '기본';
+
+						return copiedSector;
+					})
+					.filter((item) => item !== false)
+			: data.locations.locations;
 
 	return (
 		<div className={classes.root}>
@@ -278,39 +274,47 @@ const SubData = ({ loading, data, state, setState, handler }) => {
 								if (state.tabValue === 0) {
 									const parent = tableData[rowMeta.rowIndex].name;
 
-									return sectorsDetail[parent].map((sectorsDetail) => (
-										<TableRow key={sectorsDetail.name}>
-											<TableCell colSpan={colSpan}>
-												<Grid container spacin={3}>
-													<Grid
-														item
-														xs={11}
-														style={{ display: 'flex', alignItems: 'center' }}
-													>
-														<Typography style={{ fontSize: '0.875rem' }}>
-															{sectorsDetail.name}
-														</Typography>
-													</Grid>
-													<Grid item xs={1}>
-														<IconButton
-															style={{ padding: 0 }}
-															onClick={(e) =>
-																handler.handleDelete([
-																	{
-																		type: 'detail',
-																		name: sectorsDetail.name,
-																		parent,
-																	},
-																])
-															}
+									return sectorsDetail[parent] ? (
+										sectorsDetail[parent].map((sectorsDetail) => (
+											<TableRow key={sectorsDetail.name}>
+												<TableCell colSpan={colSpan}>
+													<Grid container spacin={3}>
+														<Grid
+															item
+															xs={11}
+															style={{ display: 'flex', alignItems: 'center' }}
 														>
-															<Delete />
-														</IconButton>
+															<Typography style={{ fontSize: '0.875rem' }}>
+																{sectorsDetail.name}
+															</Typography>
+														</Grid>
+														<Grid item xs={1}>
+															<IconButton
+																style={{ padding: 0 }}
+																onClick={(e) =>
+																	handler.handleDelete([
+																		{
+																			type: 'detail',
+																			name: sectorsDetail.name,
+																			parent,
+																		},
+																	])
+																}
+															>
+																<Delete />
+															</IconButton>
+														</Grid>
 													</Grid>
-												</Grid>
+												</TableCell>
+											</TableRow>
+										))
+									) : (
+										<TableRow>
+											<TableCell colSpan={colSpan}>
+												해당 업종의 상세 업종이 없습니다.
 											</TableCell>
 										</TableRow>
-									));
+									);
 								}
 							},
 						}}
@@ -358,11 +362,12 @@ const SubData = ({ loading, data, state, setState, handler }) => {
 												value={state.formValue.parent}
 												onChange={handler.handleFormValueChange}
 											>
-												{tableData.map((row) => (
-													<MenuItem key={row.name} value={row.name}>
-														{row.name}
-													</MenuItem>
-												))}
+												{tableData &&
+													tableData.map((row) => (
+														<MenuItem key={row.name} value={row.name}>
+															{row.name}
+														</MenuItem>
+													))}
 											</Select>
 										</FormControl>
 									</Grid>

@@ -9,17 +9,11 @@ import {
 	Checkbox,
 } from '@material-ui/core';
 
-const DealInfoForm = ({
-	handleFormState,
-	formState,
-	handleDealInfoFormState,
-	checkState,
-	handleCheckState,
-}) => {
+const DealInfoForm = ({ data, loading, state, setState, handler }) => {
 	const {
 		dealInfo,
 		buildingInfo: { saleArea },
-	} = formState;
+	} = state.formState;
 
 	return (
 		<Grid container spacing={3}>
@@ -29,8 +23,8 @@ const DealInfoForm = ({
 						control={
 							<Checkbox
 								color="primary"
-								onChange={handleCheckState}
-								checked={checkState.tradeCheck}
+								onChange={handler.handleCheckState}
+								checked={state.checkState.tradeCheck}
 								name="tradeCheck"
 							/>
 						}
@@ -40,8 +34,8 @@ const DealInfoForm = ({
 						control={
 							<Checkbox
 								color="primary"
-								onChange={handleCheckState}
-								checked={checkState.leaseCheck}
+								onChange={handler.handleCheckState}
+								checked={state.checkState.leaseCheck}
 								name="leaseCheck"
 							/>
 						}
@@ -49,7 +43,7 @@ const DealInfoForm = ({
 					/>
 				</FormGroup>
 			</Grid>
-			{checkState.tradeCheck && (
+			{state.checkState.tradeCheck && (
 				<>
 					<Grid item xs={12} md={12}>
 						<Typography varaint="h5">매매</Typography>
@@ -64,7 +58,7 @@ const DealInfoForm = ({
 									<InputAdornment position="end">원</InputAdornment>
 								),
 							}}
-							onChange={handleDealInfoFormState('trade')}
+							onChange={handler.handleDealInfoFormState('trade')}
 							name="price"
 							value={parseInt(dealInfo.trade.price)}
 						/>
@@ -93,7 +87,7 @@ const DealInfoForm = ({
 									<InputAdornment position="end">원</InputAdornment>
 								),
 							}}
-							onChange={handleDealInfoFormState('trade')}
+							onChange={handler.handleDealInfoFormState('trade')}
 							name="monthly"
 							value={parseInt(dealInfo.trade.monthly)}
 						/>
@@ -108,7 +102,7 @@ const DealInfoForm = ({
 									<InputAdornment position="end">원</InputAdornment>
 								),
 							}}
-							onChange={handleDealInfoFormState('trade')}
+							onChange={handler.handleDealInfoFormState('trade')}
 							name="deposit"
 							value={parseInt(dealInfo.trade.deposit)}
 						/>
@@ -117,7 +111,7 @@ const DealInfoForm = ({
 					<Grid item xs={12} md={12}></Grid>
 				</>
 			)}
-			{checkState.leaseCheck && (
+			{state.checkState.leaseCheck && (
 				<>
 					<Grid item xs={12} md={12}>
 						<Typography varaint="h5">임대</Typography>
@@ -132,7 +126,7 @@ const DealInfoForm = ({
 									<InputAdornment position="end">원</InputAdornment>
 								),
 							}}
-							onChange={handleDealInfoFormState('lease')}
+							onChange={handler.handleDealInfoFormState('lease')}
 							name="monthly"
 							value={parseInt(dealInfo.lease.monthly)}
 						/>
@@ -147,7 +141,7 @@ const DealInfoForm = ({
 									<InputAdornment position="end">원</InputAdornment>
 								),
 							}}
-							onChange={handleDealInfoFormState('lease')}
+							onChange={handler.handleDealInfoFormState('lease')}
 							name="deposit"
 							value={parseInt(dealInfo.lease.deposit)}
 						/>
@@ -163,7 +157,7 @@ const DealInfoForm = ({
 									<InputAdornment position="end">원</InputAdornment>
 								),
 							}}
-							onChange={handleDealInfoFormState('lease')}
+							onChange={handler.handleDealInfoFormState('lease')}
 							name="price"
 							value={Math.round(
 								parseInt(dealInfo.lease.monthly) / parseInt(saleArea),
@@ -180,15 +174,15 @@ const DealInfoForm = ({
 					control={
 						<Checkbox
 							color="primary"
-							onChange={handleCheckState}
-							checked={checkState.rightsCheck}
+							onChange={handler.handleCheckState}
+							checked={state.checkState.rightsCheck}
 							name="rightsCheck"
 						/>
 					}
 					label="권리금"
 				/>
 			</Grid>
-			{checkState.rightsCheck && (
+			{state.checkState.rightsCheck && (
 				<>
 					<Grid item xs={12} md={12}>
 						<TextField
@@ -200,7 +194,7 @@ const DealInfoForm = ({
 									<InputAdornment position="end">원</InputAdornment>
 								),
 							}}
-							onChange={handleFormState('dealInfo')}
+							onChange={handler.handleFormState('dealInfo')}
 							name="rights"
 							value={parseInt(dealInfo.rights)}
 						/>

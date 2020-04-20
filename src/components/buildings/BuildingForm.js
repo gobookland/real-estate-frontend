@@ -36,27 +36,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const BuildingForm = ({
-	handleFormState,
-	handleDealInfoFormState,
-	handleCheckState,
-	checkState,
-	formState,
-	handleImageState,
-	sectorInfo,
-	sectorDetail,
-	handleAddSectorState,
-	addSectorState,
-	handleAddSectorSubmit,
-	sectorDialogHook,
-	locationDialogHook,
-	setLocationName,
-	handleAddLocation,
-	locationInfo,
-	handleSubmit,
-	buildingLoading,
-	loadings,
-}) => {
+const BuildingForm = ({ data, loading, state, setState, handler }) => {
 	const [activeStep, setActiveStep] = useState(0);
 	const classes = useStyles();
 
@@ -81,7 +61,7 @@ const BuildingForm = ({
 				maxWidth={breakPoint ? 'xs' : 'md'}
 				className={classes.container}
 			>
-				{buildingLoading || sectorInfo[1] || locationInfo[1] ? (
+				{loading.buildingLoading || loading.sectors || loading.locations ? (
 					<ScreenLoading />
 				) : (
 					<>
@@ -90,20 +70,11 @@ const BuildingForm = ({
 								<StepLabel>건물 정보</StepLabel>
 								<StepContent>
 									<BuildingInfoForm
-										handleImageState={handleImageState}
-										handleFormState={handleFormState}
-										handleAddSectorState={handleAddSectorState}
-										formState={formState}
-										sectorInfo={sectorInfo}
-										sectorDetail={sectorDetail}
-										addSectorState={addSectorState}
-										handleAddSectorSubmit={handleAddSectorSubmit}
-										sectorDialogHook={sectorDialogHook}
-										locationDialogHook={locationDialogHook}
-										setLocationName={setLocationName}
-										handleAddLocation={handleAddLocation}
-										locationInfo={locationInfo}
-										loadings={loadings}
+										handler={handler}
+										state={state}
+										setState={setState}
+										data={data}
+										loading={loading}
 									/>
 									<div className={classes.actionsContainer}>
 										<div>
@@ -126,11 +97,11 @@ const BuildingForm = ({
 								<StepLabel>거래 정보</StepLabel>
 								<StepContent>
 									<DealInfoForm
-										handleFormState={handleFormState}
-										formState={formState}
-										handleDealInfoFormState={handleDealInfoFormState}
-										checkState={checkState}
-										handleCheckState={handleCheckState}
+										handler={handler}
+										state={state}
+										setState={setState}
+										data={data}
+										loading={loading}
 									/>
 									<div className={classes.actionsContainer}>
 										<div>
@@ -153,8 +124,11 @@ const BuildingForm = ({
 								<StepLabel>관계자 정보</StepLabel>
 								<StepContent>
 									<OfficialsInfoForm
-										handleFormState={handleFormState}
-										formState={formState}
+										handler={handler}
+										state={state}
+										setState={setState}
+										data={data}
+										loading={loading}
 									/>
 									<div className={classes.actionsContainer}>
 										<div>
@@ -182,7 +156,7 @@ const BuildingForm = ({
 								</Button>
 								<Button
 									color="primary"
-									onClick={handleSubmit}
+									onClick={handler.handleSubmit}
 									className={classes.button}
 								>
 									제출

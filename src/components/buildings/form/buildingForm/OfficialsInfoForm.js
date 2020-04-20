@@ -2,11 +2,11 @@ import React from 'react';
 import { useMediaQuery, Grid, TextField } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 
-const OfficialsInfoForm = ({ handleFormState, formState }) => {
+const OfficialsInfoForm = ({ handler, state, setState, data, loading }) => {
 	const theme = useTheme();
 	const breakPoint = useMediaQuery(theme.breakpoints.down('xs'));
 
-	const { officialsInfo } = formState;
+	const { officialsInfo } = state.formState;
 
 	return (
 		<Grid container spacing={3}>
@@ -15,7 +15,7 @@ const OfficialsInfoForm = ({ handleFormState, formState }) => {
 					label="주인 이름"
 					value={officialsInfo.owner}
 					fullWidth
-					onChange={handleFormState('officialsInfo')}
+					onChange={handler.handleFormState('officialsInfo')}
 					name="owner"
 				/>
 			</Grid>
@@ -25,7 +25,7 @@ const OfficialsInfoForm = ({ handleFormState, formState }) => {
 					value={officialsInfo.ownerPhone}
 					fullWidth
 					helperText="-를 제외하고 입력해주세요"
-					onChange={handleFormState('officialsInfo')}
+					onChange={handler.handleFormState('officialsInfo')}
 					name="ownerPhone"
 				/>
 			</Grid>
@@ -35,7 +35,7 @@ const OfficialsInfoForm = ({ handleFormState, formState }) => {
 					label="임차인 이름"
 					value={officialsInfo.lessee}
 					fullWidth
-					onChange={handleFormState('officialsInfo')}
+					onChange={handler.handleFormState('officialsInfo')}
 					name="lessee"
 				/>
 			</Grid>
@@ -45,7 +45,7 @@ const OfficialsInfoForm = ({ handleFormState, formState }) => {
 					value={officialsInfo.lesseePhone}
 					fullWidth
 					helperText="-를 제외하고 입력해주세요"
-					onChange={handleFormState('officialsInfo')}
+					onChange={handler.handleFormState('officialsInfo')}
 					name="lesseePhone"
 				/>
 			</Grid>

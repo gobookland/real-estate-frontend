@@ -134,25 +134,35 @@ const SubDataContainer = () => {
 		return 'error';
 	}
 
+	// * Immutable
+	const data = {
+		sectors,
+		locations,
+	};
+
+	const loading = {
+		sectors: sectors_loading,
+		locations: locations_loading,
+	};
+
+	const state = { tabValue, formValue, locationName };
+	const setState = { setLocationName };
+
+	const handler = {
+		handleTabChange,
+		handleFormValueChange,
+		handleSectorSubmit,
+		handleDelete,
+		handleLocationSubmit,
+	};
+
 	return (
 		<SubData
-			loading={{
-				sectors: sectors_loading,
-				locations: locations_loading,
-			}}
-			data={{
-				sectors,
-				locations,
-			}}
-			state={{ tabValue, formValue, locationName }}
-			setState={{ setLocationName }}
-			handler={{
-				handleTabChange,
-				handleFormValueChange,
-				handleSectorSubmit,
-				handleDelete,
-				handleLocationSubmit,
-			}}
+			loading={loading}
+			data={data}
+			state={state}
+			setState={setState}
+			handler={handler}
 		/>
 	);
 };

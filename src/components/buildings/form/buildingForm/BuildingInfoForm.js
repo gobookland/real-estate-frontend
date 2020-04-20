@@ -63,35 +63,14 @@ const useBuildingFormStyle = makeStyles((theme) => ({
 	},
 }));
 
-const BuildingInfoForm = ({
-	handleFormState,
-	formState,
-	handleImageState,
-	sectorInfo,
-	sectorDetail,
-	handleAddSectorState,
-	addSectorState,
-	handleAddSectorSubmit,
-	sectorDialogHook,
-	locationDialogHook,
-	setLocationName,
-	handleAddLocation,
-	locationInfo,
-	loadings,
-}) => {
-	const [sectorDialog, setSectorDialog] = sectorDialogHook;
-	const [locationDialog, setLocationDialog] = locationDialogHook;
-
-	const [sectors, sector_loading] = sectorInfo;
+const BuildingInfoForm = ({ data, loading, state, setState, handler }) => {
 	const [sectorTab, setSectorTab] = useState(0);
-
-	const [locations, locations_loading] = locationInfo;
 
 	const handleSectorTab = (e, newValue) => {
 		setSectorTab(newValue);
 	};
 
-	const { buildingInfo } = formState;
+	const { buildingInfo } = state.formState;
 
 	const classes = useBuildingFormStyle();
 	const theme = useTheme();
@@ -113,7 +92,7 @@ const BuildingInfoForm = ({
 						type="file"
 						id="storeImageInput"
 						name="image"
-						onChange={handleImageState('buildingInfo')}
+						onChange={handler.handleImageState('buildingInfo')}
 					/>
 					<label htmlFor="storeImageInput">
 						<Button
@@ -135,7 +114,7 @@ const BuildingInfoForm = ({
 							name="name"
 							value={buildingInfo.name}
 							fullWidth
-							onChange={handleFormState('buildingInfo')}
+							onChange={handler.handleFormState('buildingInfo')}
 						/>
 					</Grid>
 					{breakPoint && <Grid item xs={12} md={12}></Grid>}
@@ -146,7 +125,7 @@ const BuildingInfoForm = ({
 							name="layer"
 							value={parseInt(buildingInfo.layer)}
 							fullWidth
-							onChange={handleFormState('buildingInfo')}
+							onChange={handler.handleFormState('buildingInfo')}
 						/>
 					</Grid>
 					<Grid item xs={12} md={6}>
@@ -156,7 +135,7 @@ const BuildingInfoForm = ({
 							name="number"
 							value={parseInt(buildingInfo.number)}
 							fullWidth
-							onChange={handleFormState('buildingInfo')}
+							onChange={handler.handleFormState('buildingInfo')}
 						/>
 					</Grid>
 				</Grid>
@@ -173,7 +152,7 @@ const BuildingInfoForm = ({
 							<InputAdornment position="start">평</InputAdornment>
 						),
 					}}
-					onChange={handleFormState('buildingInfo')}
+					onChange={handler.handleFormState('buildingInfo')}
 				/>
 			</Grid>
 			<Grid item xs={12} md={6}>
@@ -188,14 +167,14 @@ const BuildingInfoForm = ({
 							<InputAdornment position="start">평</InputAdornment>
 						),
 					}}
-					onChange={handleFormState('buildingInfo')}
+					onChange={handler.handleFormState('buildingInfo')}
 				/>
 			</Grid>
 			{breakPoint && <Grid item xs={12} md={12}></Grid>}
 			<Grid item xs={12} md={4}>
 				<FormControl fullWidth>
 					<InputLabel htmlFor="sector">
-						{loadings.sectors ? (
+						{loading.sectors ? (
 							<CircularProgress style={{ width: '20px', height: '20px' }} />
 						) : (
 							'업종'
@@ -205,12 +184,12 @@ const BuildingInfoForm = ({
 						id="sector"
 						value={buildingInfo.sector}
 						name="sector"
-						onChange={handleFormState('buildingInfo')}
+						onChange={handler.handleFormState('buildingInfo')}
 					>
 						<MenuItem value={''}>공실</MenuItem>
-						{!sector_loading &&
-							sectors &&
-							sectors.sectors.map((sector) => (
+						{!loading.sectors &&
+							data.sectors &&
+							data.sectors.sectors.map((sector) => (
 								<MenuItem key={sector.name} value={sector.name}>
 									{sector.name}
 								</MenuItem>
@@ -221,7 +200,7 @@ const BuildingInfoForm = ({
 			<Grid item xs={12} md={4}>
 				<FormControl fullWidth>
 					<InputLabel htmlFor="sectorDetail">
-						{loadings.sectorDetail ? (
+						{loading.sectorDetail ? (
 							<CircularProgress style={{ width: '20px', height: '20px' }} />
 						) : (
 							'상세 업종'
@@ -232,13 +211,17 @@ const BuildingInfoForm = ({
 						value={buildingInfo.sectorDetail}
 						name="sectorDetail"
 						disabled={
-							!sectorDetail || (sectorDetail && sectorDetail.length === 0)
+							loading.sectorsDetail ||
+							(data.sectorsDetail &&
+								data.sectorsDetail.sectors &&
+								data.sectorsDetail.sectors.length === 0) // TODO: Check if sectorsDetail.sectors
 						}
-						onChange={handleFormState('buildingInfo')}
+						onChange={handler.handleFormState('buildingInfo')}
 					>
 						<MenuItem value={''}>공실</MenuItem>
-						{sectorDetail &&
-							sectorDetail.map((sector) => (
+						{!loading.sectorsDetail &&
+							data.sectorsDetail &&
+							data.sectorsDetail.sectors.map((sector) => (
 								<MenuItem key={sector.name} value={sector.name}>
 									{sector.name}
 								</MenuItem>
@@ -252,15 +235,15 @@ const BuildingInfoForm = ({
 					variant="outlined"
 					color="primary"
 					className={classes.noLabel}
-					onClick={(e) => setSectorDialog(!sectorDialog)}
+					onClick={(e) => setState.setSectorDialog(!state.sectorDialog)}
 				>
 					업종 추가
 				</Button>
 				<Dialog
 					fullWidth
 					maxWidth="xs"
-					open={sectorDialog}
-					onClose={(e) => setSectorDialog(false)}
+					open={state.sectorDialog}
+					onClose={(e) => setState.setSectorDialog(false)}
 				>
 					<div>
 						<Tabs
@@ -281,7 +264,7 @@ const BuildingInfoForm = ({
 									<TextField
 										label="업종"
 										fullWidth
-										onChange={handleAddSectorState}
+										onChange={handler.handleAddSectorState}
 										name="basic"
 									/>
 								</Grid>
@@ -294,13 +277,13 @@ const BuildingInfoForm = ({
 										<InputLabel htmlFor="parent">업종</InputLabel>
 										<Select
 											id="parent"
-											value={addSectorState.parent}
+											value={state.addSectorState.parent}
 											name="parent"
-											onChange={handleAddSectorState}
+											onChange={handler.handleAddSectorState}
 										>
-											{!sector_loading &&
-												sectors &&
-												sectors.sectors.map((sector) => (
+											{!loading.sectors &&
+												data.sectors &&
+												data.sectors.sectors.map((sector) => (
 													<MenuItem key={sector.name} value={sector.name}>
 														{sector.name}
 													</MenuItem>
@@ -312,7 +295,7 @@ const BuildingInfoForm = ({
 									<TextField
 										fullWidth
 										label="상세 업종"
-										onChange={handleAddSectorState}
+										onChange={handler.handleAddSectorState}
 										name="detail"
 									/>
 								</Grid>
@@ -320,10 +303,16 @@ const BuildingInfoForm = ({
 						)}
 					</DialogContent>
 					<DialogActions>
-						<Button color="secondary" onClick={(e) => setSectorDialog(false)}>
+						<Button
+							color="secondary"
+							onClick={(e) => setState.setSectorDialog(false)}
+						>
 							취소
 						</Button>
-						<Button color="primary" onClick={handleAddSectorSubmit(sectorTab)}>
+						<Button
+							color="primary"
+							onClick={handler.handleAddSectorSubmit(sectorTab)}
+						>
 							등록
 						</Button>
 					</DialogActions>
@@ -332,7 +321,7 @@ const BuildingInfoForm = ({
 			<Grid item xs={12} md={6}>
 				<FormControl fullWidth>
 					<InputLabel htmlFor="location">
-						{loadings.locations ? (
+						{loading.locations ? (
 							<CircularProgress style={{ width: '20px', height: '20px' }} />
 						) : (
 							'위치'
@@ -340,13 +329,13 @@ const BuildingInfoForm = ({
 					</InputLabel>
 					<Select
 						id="location"
-						value={buildingInfo.location}
+						value={buildingInfo.location.name}
 						name="location"
-						onChange={handleFormState('buildingInfo')}
+						onChange={handler.handleFormState('buildingInfo')}
 					>
-						{!locations_loading &&
-							locations &&
-							locations.locations
+						{!loading.locations &&
+							data.locations &&
+							data.locations.locations
 								.filter((location) => location.name.trim() !== '')
 								.map((location) => (
 									<MenuItem
@@ -382,24 +371,24 @@ const BuildingInfoForm = ({
 					variant="outlined"
 					color="primary"
 					className={classes.noLabel}
-					onClick={(e) => setLocationDialog(true)}
+					onClick={(e) => setState.setLocationDialog(true)}
 				>
 					위치 추가
 				</Button>
 				<Dialog
 					fullWidth
 					maxWidth="xs"
-					open={locationDialog}
-					onClose={(e) => setLocationDialog(false)}
+					open={state.locationDialog}
+					onClose={(e) => setState.setLocationDialog(false)}
 				>
 					<DialogTitle>위치 추가</DialogTitle>
 					<DialogContent>
 						<Grid container spacing={3}>
 							<Grid item xs={12}>
 								<div className={classes.imageBox}>
-									{buildingInfo.locationUrl ? (
+									{buildingInfo.location.image ? (
 										<img
-											src={buildingInfo.locationUrl}
+											src={buildingInfo.location.image}
 											alt="nothing"
 											className="image"
 										/>
@@ -414,7 +403,7 @@ const BuildingInfoForm = ({
 									type="file"
 									id="locationImageInput"
 									name="locationUrl"
-									onChange={handleImageState('buildingInfo')}
+									onChange={handler.handleImageState('buildingInfo')}
 								/>
 								<label htmlFor="locationImageInput">
 									<Button
@@ -430,17 +419,20 @@ const BuildingInfoForm = ({
 							<Grid item xs={12}>
 								<TextField
 									label="위치 이름"
-									onChange={(e) => setLocationName(e.target.value)}
+									onChange={(e) => setState.setLocationName(e.target.value)}
 									fullWidth
 								/>
 							</Grid>
 						</Grid>
 					</DialogContent>
 					<DialogActions>
-						<Button color="secondary" onClick={(e) => setLocationDialog(false)}>
+						<Button
+							color="secondary"
+							onClick={(e) => setState.setLocationDialog(false)}
+						>
 							취소
 						</Button>
-						<Button color="primary" onClick={handleAddLocation}>
+						<Button color="primary" onClick={handler.handleAddLocation}>
 							등록
 						</Button>
 					</DialogActions>
