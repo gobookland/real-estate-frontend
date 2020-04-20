@@ -11,7 +11,7 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 const link = createUploadLink({
 	// Todo: change url written below
-	uri: 'https://blueberry-pudding-72910.herokuapp.com/graphql',
+	uri: 'https://tranquil-citadel-42790.herokuapp.com/graphql',
 	// uri: 'http://localhost:4000/graphql',
 	credentials: 'include',
 });
